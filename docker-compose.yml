@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
   db:
-    user: "${UID}:${GID}"
     image: mysql:8.0 # You can specify a different version if needed
     environment:
       MYSQL_ROOT_PASSWORD: itstudies12345 # Replace with a strong password
