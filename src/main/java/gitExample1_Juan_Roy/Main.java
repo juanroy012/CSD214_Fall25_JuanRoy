@@ -11,6 +11,11 @@ public class Main {
 
     public static void main(String[] args) {
 
+        runApp();
+
+    }
+
+    public static void runApp() {
         Main main = new Main();
 
         main.jdbcConnection();
@@ -18,13 +23,12 @@ public class Main {
         main.createTableIfNotExist();
 
         main.bookstoreUserInterface();
-
     }
 
     public void jdbcConnection() {
         String url = "jdbc:mysql://localhost:3333/csd214-lab0";
-        String user = "root";
-        String password = "";
+        String user = "csd214";
+        String password = "itstudies12345";
 
         try {
             connection = DriverManager.getConnection(url, user, password);
@@ -292,9 +296,9 @@ public class Main {
         System.out.println("Would you like to do anything else?");
         String cont = scanner.nextLine();
         if (cont.equalsIgnoreCase("yes")) {
-            return "yes";
+            return cont;
         } else if (cont.equalsIgnoreCase("no")) {
-            return "no";
+            return cont;
         } else {
             System.out.println("Only enter yes or no.");
             return askAgain();
