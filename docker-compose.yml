@@ -5,7 +5,7 @@ services:
     image: mysql:8.0 # You can specify a different version if needed
     environment:
       MYSQL_ROOT_PASSWORD: itstudies12345 # Replace with a strong password
-      MYSQL_DATABASE: csd214-lab0 # Replace with your desired database name
+      MYSQL_DATABASE: csd214-lab1 # Replace with your desired database name
       MYSQL_USER: csd214 # Replace with your desired username
       MYSQL_PASSWORD: itstudies12345 # Replace with a strong password
     ports:
