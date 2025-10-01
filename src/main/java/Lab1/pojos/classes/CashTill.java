@@ -1,6 +1,6 @@
 package Lab1.pojos.classes;
 
-public class CashTill {
+public class CashTill implements SaleableItem {
 
 
     public void sellItem() {
@@ -8,10 +8,11 @@ public class CashTill {
     }
 
     public void sellItem(SaleableItem item) {
-
+        item.sellItem();
     }
 
-    public void getPrice() {
 
+    public double getPrice() {
+        return 0.0;
     }
 }

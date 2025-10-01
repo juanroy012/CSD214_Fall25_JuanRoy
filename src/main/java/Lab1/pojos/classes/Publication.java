@@ -2,16 +2,17 @@ package Lab1.pojos.classes;
 
 import java.util.Objects;
 
-public abstract class Publication extends Editable implements Serializable, SaleableItem {
+public abstract class Publication extends Editable<Publication> implements Serializable, SaleableItem {
 
-    private final String title;
-    private final double price;
-    private final int copies;
+    public String title;
+    public double price;
+    public int copies;
+    public int id;
 
-    public abstract void getPrice();
+    public abstract double getPrice();
 
     public Publication(){
-        title = "Default Title";
+        title = "Default Publication";
         price = -1;
         copies = -1;
     }

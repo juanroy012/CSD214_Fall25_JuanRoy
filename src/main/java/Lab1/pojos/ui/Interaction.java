@@ -1,20 +1,92 @@
 package Lab1.pojos.ui;
 
+import Lab1.pojos.classes.*;
+
+import java.util.Map;
+import java.util.Scanner;
+
+import static Lab1.pojos.Main.itemMap;
+import static Lab1.pojos.ui.Prompt.askAgain;
+
 public class Interaction {
 
-    public void AddItems() {
-        System.out.println("");
+    private static final Ticket ticket = new Ticket();
+    private static final Book book = new Book();
+    private static final Magazine magazine = new Magazine();
+    private static final DiscMag discMag = new DiscMag();
+    private static final CashTill cashTill = new CashTill();
+    private static final Scanner scanner = new Scanner(System.in);
+
+
+    // Add Interaction
+    public static void addBook() {
+        book.initialize();
+        book.setBookMap();
+        askAgain();
     }
 
-    public void EditItems() {
-        System.out.println("Item Edited!");
+    public static void addMagazine() {
+        magazine.initialize();
+        magazine.setMagazineMap();
+        askAgain();
     }
 
-    public void DeleteItems() {
-        System.out.println("Item Deleted!");
+    public static void addDiscMag() {
+        discMag.initialize();
+        discMag.setMagazineMap();
+        askAgain();
     }
 
-    public void SellItems() {
-        System.out.println("Item Sold");
+    public static void addTicket() {
+        ticket.initialize();
+        askAgain();
+    }
+
+
+    // Edit Interaction
+    public static void editBook() {
+        book.edit();
+        askAgain();
+    }
+
+    public static void editMagazine() {
+        magazine.edit();
+        askAgain();
+    }
+
+    public static void editDiscMag() {
+        discMag.edit();
+        askAgain();
+    }
+
+    public static void editTicket() {
+        ticket.edit();
+        askAgain();
+    }
+
+    public static void sellItem() {
+        try {
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            SaleableItem item = itemMap.get(choice);
+            cashTill.sellItem(item);
+            itemMap.remove(choice);
+            askAgain();
+        } catch (Exception e) {
+            System.out.println("Enter only numbers on the list!");
+            scanner.nextLine();
+            askAgain();
+        }
+
+    }
+
+    // List Interaction
+    public static void listItem() {
+        StringBuilder listBuilder = new StringBuilder();
+        for (int i : itemMap.keySet()) {
+            listBuilder.append(i + itemMap.get(i).toString() + "}\n");
+        }
+        System.out.println(listBuilder);
+        askAgain();
     }
 }

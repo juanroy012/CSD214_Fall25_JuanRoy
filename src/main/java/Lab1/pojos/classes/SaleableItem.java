@@ -5,5 +5,5 @@ public interface SaleableItem {
     public abstract void sellItem();
 
 
-    public abstract void getPrice();
+    public abstract double getPrice();
 }
