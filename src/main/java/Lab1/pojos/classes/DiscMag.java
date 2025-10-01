@@ -21,20 +21,8 @@ public class DiscMag extends Magazine{
     @Override
     public void initialize() {
         super.initialize();
-        hasDisc = promptForHasDisc();
-
-        if (hasDisc) {
-            setDiscMagazineMap();
-        } else {
-            System.out.println("Not a Disc Magazine, added to Magazine.");
-            setMagazineMap();
-        }
     }
 
-    public void setDiscMagazineMap() {
-        DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
-        itemMap.put(id, discMag);
-    }
 
     @Override
     public void sellItem() {

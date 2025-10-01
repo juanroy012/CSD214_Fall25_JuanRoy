@@ -29,15 +29,12 @@ public class Book extends Publication {
             title = promptForTitle();
             copies = promptForCopies();
             price = promptForPrice();
+            Book book = new Book (author, title, price, copies);
+            itemMap.put(id, book);
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
             askAgain();
         }
-    }
-
-    public void setBookMap() {
-        Book book = new Book (author, title, price, copies);
-        itemMap.put(id, book);
     }
 
     @Override

@@ -49,9 +49,8 @@ public class Menu {
         System.out.println("""
                 Add an item
                 1. Add Book
-                2. Add Magazine
-                3. Add DiscMag
-                4. Add Ticket
+                2. Add Magazine/Disc Magazine
+                3. Add Ticket
                 99. Exit
                 """);
 
@@ -63,8 +62,7 @@ public class Menu {
                 switch (choice) {
                     case 1 -> addBook();
                     case 2 -> addMagazine();
-                    case 3 -> addDiscMag();
-                    case 4 -> addTicket();
+                    case 3 -> addTicket();
                     case 99 -> exit();
                 }
             } else {

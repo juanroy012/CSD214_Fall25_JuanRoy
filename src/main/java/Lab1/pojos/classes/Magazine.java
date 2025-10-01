@@ -47,7 +47,7 @@ public class Magazine extends Publication{
             if (!hasDisc) {
                 Magazine magazine = new Magazine(currentIssue, title, price, copies, orderQty);
                 itemMap.put(id, magazine);
-            } else if (hasDisc) {
+            } else {
                 DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
                 itemMap.put(id, discMag);
             }

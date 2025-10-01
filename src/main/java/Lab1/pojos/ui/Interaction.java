@@ -21,19 +21,11 @@ public class Interaction {
     // Add Interaction
     public static void addBook() {
         book.initialize();
-        book.setBookMap();
         askAgain();
     }
 
     public static void addMagazine() {
         magazine.initialize();
-        magazine.setMagazineMap();
-        askAgain();
-    }
-
-    public static void addDiscMag() {
-        discMag.initialize();
-        discMag.setMagazineMap();
         askAgain();
     }
 
