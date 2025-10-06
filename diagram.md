@@ -27,11 +27,11 @@ classDiagram
     <<abstract>> Editable
     Editable: - Scanner input
     Editable: + String getInput(String)
-    Editable: + String getInput(int)
-    Editable: + String getInput(double)
-    Editable: + String getInput(boolean)
-    Editable: + String getInput(Date)
-    Editable: + String getInput(Enum)
+    Editable: + int getInput(int)
+    Editable: + double getInput(double)
+    Editable: + boolean getInput(boolean)
+    Editable: + Date getInput(Date)
+    Editable: + Enum getInput(Enum)
     Editable: + edit()
     Editable: + initialize()
     

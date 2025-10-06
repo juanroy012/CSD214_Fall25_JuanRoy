@@ -12,7 +12,7 @@ public class Magazine extends Publication{
 
     @Override
     public String toString() {
-        return  ". Magazine --> " +
+        return  "Magazine --> " +
                 "Current Issue: " + currentIssue + '\'' +
                 ", Title: " + title +
                 ", Price: " + price +
@@ -56,14 +56,9 @@ public class Magazine extends Publication{
         }
     }
 
-    public void setMagazineMap() {
-        Magazine magazine = new Magazine(currentIssue, title, price, copies, orderQty);
-        itemMap.put(id, magazine);
-    }
-
-
     @Override
     public void edit() {
+        boolean hasDisc;
         try {
             id = promptForId();
             currentIssue = promptForCurrentIssue();
@@ -71,12 +66,19 @@ public class Magazine extends Publication{
             price = promptForPrice();
             copies = promptForCopies();
             orderQty = promptForOrderQty();
+            hasDisc = promptForHasDisc();
+            if (!hasDisc) {
+                Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
+                itemMap.replace(id, newMagazine);
+            } else {
+                DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
+                itemMap.replace(id, discMag);
+            }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
         }
 
-        Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
-        itemMap.replace(id, newMagazine);
+
     }
 
     @Override

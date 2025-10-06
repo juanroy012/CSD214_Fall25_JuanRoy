@@ -4,14 +4,14 @@ import static Lab1.pojos.Main.itemMap;
 import static Lab1.pojos.ui.Prompt.*;
 
 
-public class Ticket extends Editable<Ticket> implements SaleableItem, Serializable {
+public class Ticket extends Editable implements SaleableItem, Serializable {
     public int id;
     public String description;
     public double price;
 
     @Override
     public String toString() {
-        return  ". Ticket --> " +
+        return  "Ticket --> " +
                 ", Description: " + description + '\'' +
                 ", Price: " + price;
     }

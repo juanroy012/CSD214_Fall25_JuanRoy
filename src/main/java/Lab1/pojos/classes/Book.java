@@ -71,7 +71,7 @@ public class Book extends Publication {
 
     @Override
     public String toString() {
-        return  ". Book --> " +
+        return  "Book --> " +
                 " Title: " + title + '\'' +
                 ", Copies: " + copies +
                 ", Price: " + price;

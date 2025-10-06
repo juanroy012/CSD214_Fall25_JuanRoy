@@ -2,7 +2,7 @@ package Lab1.pojos.classes;
 
 import java.util.Objects;
 
-public abstract class Publication extends Editable<Publication> implements Serializable, SaleableItem {
+public abstract class Publication extends Editable implements Serializable, SaleableItem {
 
     public String title;
     public double price;

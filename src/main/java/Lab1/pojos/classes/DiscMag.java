@@ -2,9 +2,6 @@ package Lab1.pojos.classes;
 
 import java.util.Date;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.ui.Prompt.promptForHasDisc;
-
 public class DiscMag extends Magazine{
 
     public boolean hasDisc;
@@ -30,8 +27,13 @@ public class DiscMag extends Magazine{
     }
 
     @Override
+    public void edit(){
+        super.edit();
+    }
+
+    @Override
     public String toString() {
-        return  ". Disc Magazine --> " +
+        return  "Disc Magazine --> " +
                 "Current Issue: " + currentIssue + '\'' +
                 ", Title: " + title +
                 ", Price: " + price +
