@@ -1,4 +1,4 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import java.util.Objects;
 
@@ -24,16 +24,11 @@ public class Book extends Publication {
     @Override
     public void initialize() {
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            print("Enter Author's name:");
-            author = getInput(author);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Price: ");
-            price = getInput(price);
+            id = promptForId();
+            author = promptForAuthor();
+            title = promptForTitle();
+            copies = promptForCopies();
+            price = promptForPrice();
             Book book = new Book (author, title, price, copies);
             itemMap.put(id, book);
         } catch (Exception e) {
@@ -43,17 +38,9 @@ public class Book extends Publication {
     }
 
     @Override
-    public void sellItem(int choice) {
+    public void sellItem() {
         System.out.println("Book with the Title: " + title + "\n" +
-                "Has been sold for: " + getPrice() +
-                "Copies left: " + (getCopies() - 1));
-        Book book = new Book(author, title, price, copies-1);
-        itemMap.replace(choice, book);
-    }
-
-    @Override
-    public int getCopies() {
-        return copies;
+                "Has been sold for: " + getPrice());
     }
 
     @Override
@@ -68,16 +55,11 @@ public class Book extends Publication {
     @Override
     public void edit() {
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            print("Enter Author's name:");
-            author = getInput(author);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Price: ");
-            price = getInput(price);
+            id = promptForId();
+            author = promptForAuthor();
+            title = promptForTitle();
+            copies = promptForCopies();
+            price = promptForPrice();
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
             askAgain();

@@ -1,5 +1,10 @@
 package Lab1.pojos.ui;
 
+import Lab1.pojos.classes.CashTill;
+import Lab1.pojos.classes.SaleableItem;
+import Lab2.App;
+
+import static Lab1.pojos.Main.itemMap;
 import static Lab1.pojos.ui.Interaction.*;
 import static Lab1.pojos.ui.Prompt.*;
 
@@ -8,6 +13,7 @@ import java.util.Scanner;
 public class Menu {
 
     public static final Scanner scanner = new Scanner(System.in);
+    private static final CashTill cashTill = new CashTill();
 
     public static void mainMenu() {
 
@@ -111,7 +117,15 @@ public class Menu {
 
     public static void sellItems() {
         System.out.println("Enter the item ID you want to sell: ");
-        sellItem();
+        try {
+            int choice = Integer.parseInt(scanner.nextLine());
+            SaleableItem item = itemMap.get(choice);
+            cashTill.sellItem(item, choice);
+            askAgain();
+        } catch (Exception e) {
+            System.out.println("Enter only numbers on the list!");
+            askAgain();
+        }
     }
 
     public static void listItems() {

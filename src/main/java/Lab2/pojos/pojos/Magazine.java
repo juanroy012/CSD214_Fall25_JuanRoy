@@ -1,11 +1,11 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import java.util.Date;
 
 import static Lab1.pojos.Main.itemMap;
 import static Lab1.pojos.ui.Prompt.*;
 
-public class Magazine extends Publication{
+public class Magazine extends Publication {
 
     public int orderQty;
     public Date currentIssue;
@@ -36,49 +36,37 @@ public class Magazine extends Publication{
     public void initialize() {
         boolean hasDisc;
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            currentIssue = getInput(currentIssue);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Price: ");
-            price = getInput(price);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Order Quantity: ");
-            orderQty = getInput(orderQty);
-            print("Has Disc(yes/no): ");
-            hasDisc = getInput(false);
+            id = promptForId();
+            currentIssue = promptForCurrentIssue();
+            title = promptForTitle();
+            price = promptForPrice();
+            copies = promptForCopies();
+            orderQty = promptForOrderQty();
+            hasDisc = promptForHasDisc();
+
             if (!hasDisc) {
-                Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
-                itemMap.put(id, newMagazine);
+                Magazine magazine = new Magazine(currentIssue, title, price, copies, orderQty);
+                itemMap.put(id, magazine);
             } else {
                 DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
                 itemMap.put(id, discMag);
             }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
-            askAgain();
         }
     }
 
     @Override
     public void edit() {
-        boolean hasDisc = false;
+        boolean hasDisc;
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            currentIssue = getInput(currentIssue);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Price: ");
-            price = getInput(price);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Order Quantity: ");
-            orderQty = getInput(orderQty);
-            print("Has Disc(yes/no): ");
-            hasDisc = getInput(false);
+            id = promptForId();
+            currentIssue = promptForCurrentIssue();
+            title = promptForTitle();
+            price = promptForPrice();
+            copies = promptForCopies();
+            orderQty = promptForOrderQty();
+            hasDisc = promptForHasDisc();
             if (!hasDisc) {
                 Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
                 itemMap.replace(id, newMagazine);
@@ -88,22 +76,9 @@ public class Magazine extends Publication{
             }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
-            askAgain();
         }
-    }
 
-    @Override
-    public int getCopies() {
-        return copies-1;
-    }
 
-    @Override
-    public void sellItem(int choice) {
-        System.out.println("Magazine with the Title: " + title + "\n" +
-                "Has been sold for: " + getPrice() + "\n" +
-                "Copies left: " + getCopies());
-        Magazine magazine = new Magazine(currentIssue, title, price, copies-1, orderQty);
-        itemMap.replace(choice, magazine);
     }
 
     @Override
@@ -113,5 +88,11 @@ public class Magazine extends Publication{
 
     public String getTitle() {
         return title;
+    }
+
+    @Override
+    public void sellItem() {
+        System.out.println("Magazine/Disc Magazine with the Title: " + title + "\n" +
+                "Has been sold for: " + getPrice());
     }
 }

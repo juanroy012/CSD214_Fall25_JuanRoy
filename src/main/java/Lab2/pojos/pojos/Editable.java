@@ -1,4 +1,4 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -22,14 +22,8 @@ public abstract class Editable {
         return Double.parseDouble(getInput());
     }
     public boolean getInput(boolean userInput) {
-        String input1 = getInput();
-        return switch (input1) {
-            case "yes" -> true;
-            case "no" -> false;
-            default -> Boolean.parseBoolean(getInput());
-        };
+        return Boolean.parseBoolean(getInput());
     }
-
     public Date getInput(Date userInput) {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         simpleDateFormat.setLenient(false);

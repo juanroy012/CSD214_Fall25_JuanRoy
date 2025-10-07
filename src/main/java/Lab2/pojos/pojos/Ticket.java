@@ -1,4 +1,4 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import static Lab1.pojos.Main.itemMap;
 import static Lab1.pojos.ui.Prompt.*;
@@ -29,12 +29,9 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
     @Override
     public void initialize() {
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            print("Enter Description: ");
-            description = getInput(description);
-            print("Enter Price: ");
-            price = getInput(price);
+            id = promptForId();
+            description = promptForDescription();
+            price = promptForPrice();
             Ticket newTicket = new Ticket(description, price);
             itemMap.put(id, newTicket);
         } catch (Exception e) {
@@ -50,12 +47,9 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
     @Override
     public void edit() {
         try {
-            print("Enter ID: ");
-            id = getInput(id);
-            print("Enter Description: ");
-            description = getInput(description);
-            print("Enter Price: ");
-            price = getInput(price);
+            id = promptForId();
+            description = promptForDescription();
+            price = promptForPrice();
         } catch (Exception e) {
             System.out.println("Enter only numbers on the list!");
             askAgain();
@@ -66,10 +60,9 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
 
 
     @Override
-    public void sellItem(int choice) {
+    public void sellItem() {
         System.out.println("Ticket with the Description: " + description + "\n" +
                 "Has been sold for: " + getPrice());
-        itemMap.remove(choice);
     }
 
     @Override

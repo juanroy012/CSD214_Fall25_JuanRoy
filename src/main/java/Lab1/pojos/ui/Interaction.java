@@ -60,20 +60,6 @@ public class Interaction {
         askAgain();
     }
 
-    public static void sellItem() {
-        try {
-            int choice = scanner.nextInt();
-            scanner.nextLine();
-            SaleableItem item = itemMap.get(choice);
-            cashTill.sellItem(item);
-            itemMap.remove(choice);
-            askAgain();
-        } catch (Exception e) {
-            System.out.println("Enter only numbers on the list!");
-            askAgain();
-        }
-    }
-
     public static void deleteItem(){
         try {
             int choice = scanner.nextInt();

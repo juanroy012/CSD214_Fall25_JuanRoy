@@ -1,10 +1,8 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import java.util.Date;
 
-import static Lab1.pojos.Main.itemMap;
-
-public class DiscMag extends Magazine{
+public class DiscMag extends Magazine {
 
     public boolean hasDisc;
 
@@ -24,12 +22,8 @@ public class DiscMag extends Magazine{
 
 
     @Override
-    public void sellItem(int choice) {
-        System.out.println("Disc Magazine with the Title: " + title + "\n" +
-                "Has been sold for: " + getPrice() + "\n" +
-                "Copies left: " + getCopies());
-        DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies-1, orderQty);
-        itemMap.replace(choice, discMag);
+    public void sellItem() {
+        super.sellItem();
     }
 
     @Override

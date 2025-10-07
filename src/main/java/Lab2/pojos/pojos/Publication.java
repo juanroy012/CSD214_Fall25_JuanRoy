@@ -1,4 +1,4 @@
-package Lab1.pojos.classes;
+package Lab2.classes;
 
 import java.util.Objects;
 
@@ -8,8 +8,6 @@ public abstract class Publication extends Editable implements Serializable, Sale
     public double price;
     public int copies;
     public int id;
-
-    public abstract int getCopies();
 
     public abstract double getPrice();
 
