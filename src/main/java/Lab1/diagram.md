@@ -31,7 +31,7 @@ classDiagram
     Editable: + int getInput(int)
     Editable: + double getInput(double)
     Editable: + boolean getInput(boolean)
-    Editable: + Date getInput(Date)
+    Editable: + Date getInput(LocalDate)
     Editable: + Enum getInput(Enum)
     Editable: + edit()
     Editable: + initialize()
@@ -42,6 +42,7 @@ classDiagram
     Publication: - double price
     Publication: - int copies
     Publication: - int id
+    Publication: + getCopies()
     Publication: + getPrice()
     Publication: + Publication()
     Publication: + Publication(String title, double price. int copies)
@@ -53,8 +54,8 @@ classDiagram
     CashTill: - double runningTotal
     CashTill: + CashTill()
     CashTill: + showTotal()
-    CashTill: + sellItem(SaleableItem item, int choice)
-    CashTill: + sellItem(int choice)
+    CashTill: + sellItem(SaleableItem item)
+    CashTill: + sellItem()
     CashTill: + getPrice()
     
     Class Ticket
@@ -68,13 +69,13 @@ classDiagram
     Ticket: + getDescription()
     Ticket: + initialize()
     Ticket: + getPrice()
-    Ticket: + sellItem(int choice)
+    Ticket: + sellItem()
     
     Class Book
     Book: - String author
     Book: + edit()
     Book: + initialize()
-    Book: + sellItem(int choice)
+    Book: + sellItem()
     Book: + Book()
     Book: + Book(String author)
     Book: + Book(String author, String title, double price, int copies)
@@ -91,7 +92,7 @@ classDiagram
     Magazine: + Magazine()
     Magazine: + edit()
     Magazine: + initialize()
-    Magazine: + sellItem(int choice)
+    Magazine: + sellItem()
     Magazine: + getPrice()
     Magazine: + getTitle()
     Magazine: + toString()
