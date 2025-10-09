@@ -27,6 +27,10 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
         return price;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     @Override
     public void initialize() {
         try {
