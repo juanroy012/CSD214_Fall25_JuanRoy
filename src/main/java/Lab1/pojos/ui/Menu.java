@@ -1,10 +1,9 @@
 package Lab1.pojos.ui;
 
-import Lab1.pojos.classes.CashTill;
-import Lab1.pojos.classes.SaleableItem;
-import Lab2.App;
+import Lab1.pojos.classes.*;
 
 import static Lab1.pojos.Main.itemMap;
+import static Lab1.pojos.Main.main;
 import static Lab1.pojos.ui.Interaction.*;
 import static Lab1.pojos.ui.Prompt.*;
 
@@ -47,29 +46,49 @@ public class Menu {
             System.out.println("Enter only numbers on the list!");
             askAgain();
         }
+
     }
 
     public static void addItems() {
         System.out.println("""
+                ***********************
                 Add an item
                 1. Add Book
                 2. Add Magazine
                 3. Add Disc Magazine
                 4. Add Ticket
                 99. Exit
-                """);
+                ***********************
+                Enter Choice: \s""");
 
         int choice;
         try {
             choice = Integer.parseInt(scanner.nextLine());
             if (choice >= 1 && choice <= 4 || choice == 99) {
                 switch (choice) {
-                    case 1 -> addBook();
-                    case 2 -> addMagazine();
-                    case 3 -> addDiscMag();
-                    case 4 -> addTicket();
-                    case 99 -> exit();
-                }
+                    case 1 :
+                        Book book = new Book();
+                        book.initialize();
+                        itemMap.put(book.id, book);
+                        break;
+                    case 2 :
+                        Magazine magazine = new Magazine();
+                        magazine.initialize();
+                        itemMap.put(magazine.id, magazine);
+                        break;
+                    case 3 :
+                        DiscMag discMag = new DiscMag();
+                        discMag.initialize();
+                        itemMap.put(discMag.id, discMag);
+                        break;
+                    case 4 :
+                        Ticket ticket = new Ticket();
+                        ticket.initialize();
+                        itemMap.put(ticket.id, ticket);
+                        break;
+                    case 99 :
+                        mainMenu();
+                } mainMenu();
             } else {
                 throw new Exception();
             }
@@ -81,32 +100,28 @@ public class Menu {
 
     public static void editItems() {
         System.out.println("""
+                ***********************
                 Edit an item
                 1. Edit Book
                 2. Edit Magazine
                 3. Edit Disc Magazine
                 4. Edit Ticket
                 99. Exit
-                """);
+                ***********************
+                Enter Choice \s""");
 
-        int choice;
-        try {
-            choice = Integer.parseInt(scanner.nextLine());
-            if (choice >= 1 && choice <= 4 || choice == 99) {
-                switch (choice) {
-                    case 1 -> editBook();
-                    case 2 -> editMagazine();
-                    case 3 -> editDiscMag();
-                    case 4 -> editTicket();
-                    case 99 -> exit();
-                }
-            } else {
-                throw new Exception();
-            }
-        } catch (Exception e) {
-            System.out.println("Enter only numbers on the list!");
-            askAgain();
+        int choice = Integer.parseInt(scanner.nextLine());
+        Editable item = (Editable) itemMap.get(choice);
+        if (item != null) {
+            editItem(item);
+        } else {
+            print("Item doesn't exist");
         }
+
+    }
+
+    public static void editItem(Editable item) {
+        item.edit();
     }
 
     public static void deleteItems() {
@@ -120,7 +135,7 @@ public class Menu {
         try {
             int choice = Integer.parseInt(scanner.nextLine());
             SaleableItem item = itemMap.get(choice);
-            cashTill.sellItem(item, choice);
+            cashTill.sellItem(item);
             askAgain();
         } catch (Exception e) {
             System.out.println("Enter only numbers on the list!");

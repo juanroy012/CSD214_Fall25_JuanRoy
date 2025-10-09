@@ -6,12 +6,14 @@ public class CashTill implements SaleableItem {
 
     Scanner scanner = new Scanner(System.in);
 
-    public void sellItem(SaleableItem item, int choice) {
-        item.sellItem(choice);
+    public void sellItem(SaleableItem item) {
+        item.sellItem();
     }
 
     @Override
-    public void sellItem(int choice) {}
+    public void sellItem() {
+
+    }
 
     public double getPrice() {
         return 0.0;

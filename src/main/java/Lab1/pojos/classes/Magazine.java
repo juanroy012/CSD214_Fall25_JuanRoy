@@ -1,6 +1,6 @@
 package Lab1.pojos.classes;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import static Lab1.pojos.Main.itemMap;
 import static Lab1.pojos.ui.Prompt.*;
@@ -8,7 +8,7 @@ import static Lab1.pojos.ui.Prompt.*;
 public class Magazine extends Publication{
 
     public int orderQty;
-    public Date currentIssue;
+    public LocalDate currentIssue;
 
     @Override
     public String toString() {
@@ -22,10 +22,10 @@ public class Magazine extends Publication{
 
     public Magazine() {
         orderQty = -1;
-        currentIssue = new Date();
+        currentIssue = LocalDate.now();
     }
 
-    public Magazine(Date currentIssue, String title, double price, int copies, int orderQty) {
+    public Magazine(LocalDate currentIssue, String title, double price, int copies, int orderQty) {
         super (title, price, copies);
         this.orderQty = orderQty;
         this.currentIssue = currentIssue;
@@ -34,10 +34,10 @@ public class Magazine extends Publication{
 
     @Override
     public void initialize() {
-        boolean hasDisc;
         try {
             print("Enter ID: ");
             id = getInput(id);
+            print("Enter the issue date (yyyy-mm-dd): ");
             currentIssue = getInput(currentIssue);
             print("Enter Title: ");
             title = getInput(title);
@@ -47,15 +47,6 @@ public class Magazine extends Publication{
             copies = getInput(copies);
             print("Enter Order Quantity: ");
             orderQty = getInput(orderQty);
-            print("Has Disc(yes/no): ");
-            hasDisc = getInput(false);
-            if (!hasDisc) {
-                Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
-                itemMap.put(id, newMagazine);
-            } else {
-                DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
-                itemMap.put(id, discMag);
-            }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
             askAgain();
@@ -64,27 +55,23 @@ public class Magazine extends Publication{
 
     @Override
     public void edit() {
-        boolean hasDisc = false;
         try {
-            print("Enter ID: ");
+            print("Enter the ID of the magazine you'd like to edit: ");
             id = getInput(id);
-            currentIssue = getInput(currentIssue);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Price: ");
-            price = getInput(price);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Order Quantity: ");
-            orderQty = getInput(orderQty);
-            print("Has Disc(yes/no): ");
-            hasDisc = getInput(false);
-            if (!hasDisc) {
-                Magazine newMagazine = new Magazine(currentIssue, title, price, copies, orderQty);
-                itemMap.replace(id, newMagazine);
+            SaleableItem item = itemMap.get(id);
+            if (item != null) {
+                print("Enter the issue date (yyyy-mm-dd): ");
+                currentIssue = getInput(currentIssue);
+                print("Enter Title: ");
+                title = getInput(title);
+                print("Enter Price: ");
+                price = getInput(price);
+                print("Enter Copies: ");
+                copies = getInput(copies);
+                print("Enter Order Quantity: ");
+                orderQty = getInput(orderQty);
             } else {
-                DiscMag discMag = new DiscMag(hasDisc, currentIssue, title, price, copies, orderQty);
-                itemMap.replace(id, discMag);
+                print("Item with the ID: " + id + " is not found.");
             }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
@@ -98,12 +85,15 @@ public class Magazine extends Publication{
     }
 
     @Override
-    public void sellItem(int choice) {
-        System.out.println("Magazine with the Title: " + title + "\n" +
-                "Has been sold for: " + getPrice() + "\n" +
-                "Copies left: " + getCopies());
-        Magazine magazine = new Magazine(currentIssue, title, price, copies-1, orderQty);
-        itemMap.replace(choice, magazine);
+    public void sellItem() {
+        if (getCopies() == 0) {
+            print("There is no copy left for that item!");
+        } else {
+            copies -= 1;
+            System.out.println("Magazine with the Title: " + title + "\n" +
+                    "Has been sold for: " + getPrice() + "\n" +
+                    "Copies left: " + getCopies());
+        }
     }
 
     @Override

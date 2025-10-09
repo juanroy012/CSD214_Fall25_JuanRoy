@@ -34,8 +34,6 @@ public class Book extends Publication {
             copies = getInput(copies);
             print("Enter Price: ");
             price = getInput(price);
-            Book book = new Book (author, title, price, copies);
-            itemMap.put(id, book);
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
             askAgain();
@@ -43,12 +41,15 @@ public class Book extends Publication {
     }
 
     @Override
-    public void sellItem(int choice) {
-        System.out.println("Book with the Title: " + title + "\n" +
-                "Has been sold for: " + getPrice() +
-                "Copies left: " + (getCopies() - 1));
-        Book book = new Book(author, title, price, copies-1);
-        itemMap.replace(choice, book);
+    public void sellItem() {
+        if (getCopies() == 0) {
+            print("There is no copy left for this item!");
+        } else {
+            copies -= 1;
+            print("Book with the Title: " + title + "\n" +
+                "Has been sold for: " + getPrice() + "\n" +
+                "Copies left: " + getCopies());
+        }
     }
 
     @Override
@@ -68,23 +69,26 @@ public class Book extends Publication {
     @Override
     public void edit() {
         try {
-            print("Enter ID: ");
+            print("Enter the ID of the book you'd like to edit: ");
             id = getInput(id);
-            print("Enter Author's name:");
-            author = getInput(author);
-            print("Enter Title: ");
-            title = getInput(title);
-            print("Enter Copies: ");
-            copies = getInput(copies);
-            print("Enter Price: ");
-            price = getInput(price);
+            SaleableItem item = itemMap.get(id);
+            if (item != null) {
+                print("Enter Author's name:");
+                author = getInput(author);
+                print("Enter Title: ");
+                title = getInput(title);
+                print("Enter Copies: ");
+                copies = getInput(copies);
+                print("Enter Price: ");
+                price = getInput(price);
+            } else {
+                print("Item with the ID: " + id + " is not found.");
+                askAgain();
+            }
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
             askAgain();
         }
-
-        Book newBook = new Book(author, title, price, copies);
-        itemMap.replace(id, newBook);
     }
 
     @Override

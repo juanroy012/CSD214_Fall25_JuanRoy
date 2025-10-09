@@ -50,26 +50,27 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
     @Override
     public void edit() {
         try {
-            print("Enter ID: ");
+            print("Enter the ID of the ticket you'd like to edit: ");
             id = getInput(id);
-            print("Enter Description: ");
-            description = getInput(description);
-            print("Enter Price: ");
-            price = getInput(price);
+            SaleableItem item = itemMap.get(id);
+            if (item != null) {
+                print("Enter Description: ");
+                description = getInput(description);
+                print("Enter Price: ");
+                price = getInput(price);
+            } else {
+                print("Item with the ID: " + id + " is not found.");
+            }
         } catch (Exception e) {
             System.out.println("Enter only numbers on the list!");
             askAgain();
         }
-        Ticket newTicket = new Ticket(description, price);
-        itemMap.replace(id, newTicket);
     }
 
-
     @Override
-    public void sellItem(int choice) {
+    public void sellItem() {
         System.out.println("Ticket with the Description: " + description + "\n" +
                 "Has been sold for: " + getPrice());
-        itemMap.remove(choice);
     }
 
     @Override

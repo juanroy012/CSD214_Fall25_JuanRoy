@@ -9,56 +9,7 @@ import static Lab1.pojos.ui.Prompt.askAgain;
 
 public class Interaction {
 
-    private static final Ticket ticket = new Ticket();
-    private static final Book book = new Book();
-    private static final Magazine magazine = new Magazine();
-    private static final DiscMag discMag = new DiscMag();
-    private static final CashTill cashTill = new CashTill();
     private static final Scanner scanner = new Scanner(System.in);
-
-
-    // Add Interaction
-    public static void addBook() {
-        book.initialize();
-        askAgain();
-    }
-
-    public static void addMagazine() {
-        magazine.initialize();
-        askAgain();
-    }
-
-    public static void addDiscMag() {
-        discMag.initialize();
-        askAgain();
-    }
-
-    public static void addTicket() {
-        ticket.initialize();
-        askAgain();
-    }
-
-
-    // Edit Interaction
-    public static void editBook() {
-        book.edit();
-        askAgain();
-    }
-
-    public static void editMagazine() {
-        magazine.edit();
-        askAgain();
-    }
-
-    public static void editDiscMag() {
-        discMag.edit();
-        askAgain();
-    }
-
-    public static void editTicket() {
-        ticket.edit();
-        askAgain();
-    }
 
     public static void deleteItem(){
         try {

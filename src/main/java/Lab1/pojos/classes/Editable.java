@@ -2,7 +2,7 @@ package Lab1.pojos.classes;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public abstract class Editable {
@@ -30,19 +30,9 @@ public abstract class Editable {
         };
     }
 
-    public Date getInput(Date userInput) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        simpleDateFormat.setLenient(false);
-
-        while (true) {
-            System.out.println("Enter the issue date (yyyy-mm-dd): ");
-            String dateString = getInput();
-            try {
-                return simpleDateFormat.parse(dateString);
-            } catch (ParseException e) {
-                System.out.println("Input valid date!");
-            }
-        }
+    public LocalDate getInput(LocalDate userInput) {
+        String dateString = getInput();
+        return LocalDate.parse(dateString);
     }
 
     public Enum getInput(Enum userInput) {
