@@ -40,9 +40,13 @@ classDiagram
     Publication: - String title
     Publication: - double price
     Publication: - int copies
+    Publication: - String author
+    Publication: - String isbn
+    Publication: - String description
+    Publication: + getCopies()
     Publication: + getPrice()
     Publication: + Publication()
-    Publication: + Publication(String title, double price. int copies)
+    Publication: + Publication(String author, String title, double price. int copies, String isbn, String description)
     Publication: + toString()
     Publication: + equals()
     Publication: + hashCode()
@@ -52,41 +56,53 @@ classDiagram
     CashTill: + CashTill()
     CashTill: + showTotal()
     CashTill: + sellItem(SaleableItem item)
+    CashTill: + sellItem()
+    CashTill: + getPrice()
     
     Class Ticket
     Ticket: + String description
     Ticket: + double price
-    Ticket: + edit()
-    Ticket: + initialize()
+    Ticket: + toString()
+    Ticket: + Ticket()
+    Ticket: + Ticket(String description, double price)
     Ticket: + getPrice()
+    Ticket: + initialize()
+    Ticket: + edit()
     Ticket: + sellItem()
     
     Class Book
-    Book: - String author
-    Book: + edit()
-    Book: + initialize()
-    Book: + sellItem()
     Book: + Book()
     Book: + Book(String author)
     Book: + Book(String author, String title, double price, int copies)
+    Book: + getCopies()
+    Book: + getPrice()
+    Book: + getTitle()
+    Book: + initialize()
+    Book: + edit()
+    Book: + sellItem()
     Book: + toString()
     Book: + equals()
     Book: + hashCode()
     
     Class Magazine
-    Magazine: - int orderQty
-    Magazine: - java.util.Date currentIssue
+    Magazine: - LocalDate currentIssue
     Magazine: + Magazine()
-    Magazine: + edit()
+    Magazine: + Magazine(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue)
+    Magazine: + getCopies()
+    Magazine: + getPrice()
+    Magazine: + getTitle()
     Magazine: + initialize()
+    Magazine: + edit()
     Magazine: + sellItem()
+    Magazine: + toString()
     
     Class DiscMag
     DiscMag: - boolean hasDisc
-    DiscMag: + initialize()
-    DiscMag: + sellItem()
     DiscMag: + DiscMag()
-    DiscMag: + DiscMag(boolean hasDisc, int orderQty, Date currentIssue, String title, double price, int copies)
-
+    DiscMag: + DiscMag(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue, boolean hasDisc)
+    DiscMag: + initialize()
+    DiscMag: + edit()
+    DiscMag: + sellItem()
+    DiscMag: + toString()
 
 ```

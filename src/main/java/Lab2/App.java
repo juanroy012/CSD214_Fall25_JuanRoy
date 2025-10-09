@@ -1,0 +1,294 @@
+package Lab2;
+
+import Lab2.pojos.*;
+
+import java.io.InputStream;
+import java.io.PrintStream;
+import java.util.*;
+import java.util.UUID;
+
+import static Lab2.Prompt.*;
+
+public class App {
+    public static Map<Long, SaleableItem> itemMap = new HashMap<>();
+    private static final App app = new App();
+
+    private static final String menu = "\n***********************\n"
+            + " 1. Add Items\n"
+            + " 2. Edit Items\n"
+            + " 3. Delete Items\n"
+            + " 4. Sell item(s)\n"
+            + " 5. List items\n"
+            + "99. Quit\n"
+            + "***********************\n"
+            + "Enter choice: ";
+
+    private static final String add = "\n***********************\n"
+            + " 1. Add Book\n"
+            + " 2. Add Magazine\n"
+            + " 3. Add Disc Magazine\n"
+            + " 4. Add Ticket\n"
+            + "99. Back\n"
+            + "***********************\n"
+            + "Enter choice: ";
+
+    private static final String list = "\n***********************\n"
+            + " 1. List Book\n"
+            + " 2. List Magazine\n"
+            + " 3. List Disc Magazine\n"
+            + " 4. List Ticket\n"
+            + " 5. List All Items\n"
+            + "99. Back\n"
+            + "***********************\n"
+            + "Enter choice: ";
+
+    private final ArrayList<SaleableItem> saleableItems = new ArrayList<>();
+    private final int currentItem = 0;
+
+    private Scanner input;
+    private final PrintStream out;
+
+    // Default constructor for normal execution
+    public App() {
+        this(System.in, System.out);
+    }
+    // Constructor for testing
+    public App(InputStream in, PrintStream out) {
+        this.input = new Scanner(in);
+        this.out = out;
+    }
+
+    // Methods
+
+    public void run(){
+        boolean quit = false;
+        while (!quit) {
+            try {
+                System.out.println(menu);
+                int choice = Integer.parseInt(input.nextLine());
+                switch (choice) {
+                    case 1:
+                        app.addItem();
+                        break;
+                    case 2:
+                        app.editItem();
+                        break;
+                    case 3:
+                        app.deleteItem();
+                        break;
+                    case 4:
+                        app.sellItem();
+                        break;
+                    case 5:
+                        app.listI();
+                        break;
+                    case 6:
+                        populate();
+                        break;
+                    case 99:
+                        quit = true;
+                        System.out.println("***********************");
+                        System.out.println("99. Quit");
+                        System.out.println("Exiting application. Goodbye!");
+                        break;
+                    default:
+                        System.out.println("Wrong entry, try again...");
+                        break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Wrong entry, try again...");
+            } catch (Exception e) {
+                System.out.println("Unknown Exception : " + e.getMessage());
+            }
+        }
+    }
+
+    public boolean findItemExists(SaleableItem item){
+
+        return false;
+    }
+
+    public SaleableItem findItem(SaleableItem item){
+
+        return null;
+    }
+
+    public void editItem(){
+        print("Enter ID: ");
+        long choice = Long.parseLong(input.nextLine());
+        Editable item = (Editable) itemMap.get(choice);
+        if (item != null) {
+            editItem(item);
+            run();
+        } else {
+            print("Can't find the item with ID: " + choice);
+            run();
+        }
+    }
+
+    public void editItem(Editable item){
+        item.edit();
+    }
+
+    public void deleteItem(){
+        print("Enter ID: ");
+        long choice = Long.parseLong(input.nextLine());
+        SaleableItem item = itemMap.get(choice);
+        if (item != null) {
+            itemMap.remove(choice);
+            run();
+        } else {
+            print("Item with the ID: " + choice + " is not found.");
+            run();
+        }
+    }
+
+    public void populate(){
+        for (int i = 0; i < 10; i++) {
+            addItem(Util.getFakeBook());
+            addItem(Util.getFakeMagazine());
+            addItem(Util.getFakeDiscMag());
+            addItem(Util.getFakeTicket());
+        }
+        run();
+    }
+
+    public void listAny(){
+        StringBuilder listBuilder = new StringBuilder();
+        for (Long i : itemMap.keySet()) {
+            listBuilder.append(i + ". " + itemMap.get(i).toString() + "\n");
+        }
+        System.out.println(listBuilder);
+        run();
+    }
+
+    public SaleableItem getItem(SaleableItem item){
+        return null;
+    }
+
+    public void sellItem(){
+        CashTill cashTill = new CashTill();
+        print("Enter ID: ");
+        long choice = Long.parseLong(input.nextLine());
+        SaleableItem item = itemMap.get(choice);
+        if (item != null) {
+            cashTill.sellItem(item);
+            print("Running Total: " + cashTill.showTotal());
+            run();
+        } else {
+            print("Item with the ID: " + choice + " is not found.");
+            run();
+        }
+    }
+
+    public void listI(Object item){
+        Class<?> itemClass = item.getClass();
+        StringBuilder listBuilder = new StringBuilder();
+        boolean found = false;
+
+        for (Long i : itemMap.keySet()) {
+            Object itemType = itemMap.get(i);
+            if (itemClass.isInstance(itemType)) {
+                if (!found) {
+                    print("Item list:\n");
+                    found = true;
+                }
+                listBuilder.append(i)
+                        .append(". ")
+                        .append(itemType)
+                        .append("\n");
+            }
+        }
+        if (!found) {
+            System.out.println("No items of type " + itemClass.getSimpleName());
+        } else {
+            System.out.println(listBuilder);
+        }
+    }
+
+    public void listI() {
+        print(list);
+        int choice = Integer.parseInt(input.nextLine());
+        switch(choice) {
+            case 1:
+                listI(new Book());
+                break;
+            case 2:
+                listI(new Magazine());
+                break;
+            case 3:
+                listI(new DiscMag());
+                break;
+            case 4:
+                listI(new Ticket());
+                break;
+            case 5:
+                listAny();
+                break;
+            case 99:
+                run();
+        }
+    }
+
+    public void addItem(){
+        print(add);
+        int choice = Integer.parseInt(input.nextLine());
+
+        try {
+            switch (choice) {
+                case 1 -> {
+                    Book book = new Book();
+                    book.initialize();
+                    addItem(book);
+                }
+                case 2 -> {
+                    Magazine magazine = new Magazine();
+                    magazine.initialize();
+                    addItem(magazine);
+                }
+                case 3 -> {
+                    DiscMag discMag = new DiscMag();
+                    discMag.initialize();
+                    addItem(discMag);
+                }
+                case 4 -> {
+                    Ticket ticket = new Ticket();
+                    ticket.initialize();
+                    addItem(ticket);
+                }
+                case 99 -> {
+                    run();
+                }
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Wrong entry, try again...");
+        } catch (Exception e) {
+            System.out.println("Unknown Exception : " + e.getMessage());
+        }
+    }
+
+    public void addItem(SaleableItem item){
+        long id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+        switch(item) {
+            case Book book:
+                itemMap.put(id, book);
+                break;
+            case DiscMag discMag:
+                itemMap.put(id, discMag);
+                break;
+            case Magazine magazine:
+                itemMap.put(id, magazine);
+                break;
+            case Ticket ticket:
+                itemMap.put(id, ticket);
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + item);
+        }
+    }
+
+    public List<SaleableItem> getSaleableItems() {
+        return new ArrayList<>(itemMap.values());
+    }
+
+}
