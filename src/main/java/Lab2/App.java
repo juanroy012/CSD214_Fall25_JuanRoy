@@ -41,9 +41,6 @@ public class App {
             + "***********************\n"
             + "Enter choice: ";
 
-    private final ArrayList<SaleableItem> saleableItems = new ArrayList<>();
-    private final int currentItem = 0;
-
     public static Scanner input;
     private final PrintStream out;
 
@@ -80,6 +77,9 @@ public class App {
                         break;
                     case 5:
                         listI();
+                        break;
+                    case 6:
+                        populate();;
                         break;
                     case 99:
                         quit = true;

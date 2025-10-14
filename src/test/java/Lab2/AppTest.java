@@ -172,11 +172,8 @@ class AppTest {
                 .findFirst()
                 .orElse(null);
 
-        // Verify that our ticket was actually found.
-        assertNotNull(addedItem, "The newly created ticket should be found in the saleable items list.");
-
         // Verify the properties of the found ticket.
-        assertTrue(addedItem instanceof Ticket, "The added item must be an instance of Ticket.");
+        assertInstanceOf(Ticket.class, addedItem, "The added item must be an instance of Ticket.");
         Ticket addedTicket = (Ticket) addedItem; // Cast for specific assertions
         assertEquals(expectedDescription, addedTicket.getDescription(), "The ticket description should match the input.");
         assertEquals(expectedPrice, addedTicket.getPrice(), "The ticket price should match the input.");
