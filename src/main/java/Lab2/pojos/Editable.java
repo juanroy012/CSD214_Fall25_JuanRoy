@@ -1,15 +1,17 @@
 package Lab2.pojos;
 
+import Lab2.App;
+import Lab2.Prompt;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public abstract class Editable {
-    public Scanner input = new Scanner(System.in);
 
     public String getInput() {
-        return input.nextLine();
+        return App.input.nextLine();
     }
 
     public String getInput(String userInput) {

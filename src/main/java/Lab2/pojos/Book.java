@@ -32,6 +32,10 @@ public class Book extends Publication {
         return title;
     }
 
+    public String getAuthor() {
+        return author;
+    }
+
 
     @Override
     public void initialize() {

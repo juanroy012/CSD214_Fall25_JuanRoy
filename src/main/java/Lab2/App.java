@@ -10,8 +10,7 @@ import java.util.UUID;
 import static Lab2.Prompt.*;
 
 public class App {
-    public static Map<Long, SaleableItem> itemMap = new HashMap<>();
-    private static final App app = new App();
+    public Map<Long, SaleableItem> itemMap = new HashMap<>();
 
     private static final String menu = "\n***********************\n"
             + " 1. Add Items\n"
@@ -45,7 +44,7 @@ public class App {
     private final ArrayList<SaleableItem> saleableItems = new ArrayList<>();
     private final int currentItem = 0;
 
-    private Scanner input;
+    public static Scanner input;
     private final PrintStream out;
 
     // Default constructor for normal execution
@@ -68,22 +67,19 @@ public class App {
                 int choice = Integer.parseInt(input.nextLine());
                 switch (choice) {
                     case 1:
-                        app.addItem();
+                        addItem();
                         break;
                     case 2:
-                        app.editItem();
+                        editItem();
                         break;
                     case 3:
-                        app.deleteItem();
+                        deleteItem();
                         break;
                     case 4:
-                        app.sellItem();
+                        sellItem();
                         break;
                     case 5:
-                        app.listI();
-                        break;
-                    case 6:
-                        populate();
+                        listI();
                         break;
                     case 99:
                         quit = true;
@@ -119,10 +115,8 @@ public class App {
         Editable item = (Editable) itemMap.get(choice);
         if (item != null) {
             editItem(item);
-            run();
         } else {
             print("Can't find the item with ID: " + choice);
-            run();
         }
     }
 
@@ -136,21 +130,18 @@ public class App {
         SaleableItem item = itemMap.get(choice);
         if (item != null) {
             itemMap.remove(choice);
-            run();
         } else {
             print("Item with the ID: " + choice + " is not found.");
-            run();
         }
     }
 
     public void populate(){
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             addItem(Util.getFakeBook());
             addItem(Util.getFakeMagazine());
             addItem(Util.getFakeDiscMag());
             addItem(Util.getFakeTicket());
         }
-        run();
     }
 
     public void listAny(){
@@ -159,7 +150,6 @@ public class App {
             listBuilder.append(i + ". " + itemMap.get(i).toString() + "\n");
         }
         System.out.println(listBuilder);
-        run();
     }
 
     public SaleableItem getItem(SaleableItem item){
@@ -174,10 +164,8 @@ public class App {
         if (item != null) {
             cashTill.sellItem(item);
             print("Running Total: " + cashTill.showTotal());
-            run();
         } else {
             print("Item with the ID: " + choice + " is not found.");
-            run();
         }
     }
 
@@ -226,7 +214,7 @@ public class App {
                 listAny();
                 break;
             case 99:
-                run();
+                break;
         }
     }
 
@@ -257,7 +245,7 @@ public class App {
                     addItem(ticket);
                 }
                 case 99 -> {
-                    run();
+                    break;
                 }
             }
         } catch (InputMismatchException e) {

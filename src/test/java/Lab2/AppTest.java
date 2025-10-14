@@ -1,7 +1,7 @@
 package Lab2;
 
 import Lab2.pojos.SaleableItem;
-import Lab2.pojos.Ticket;
+import Lab2.pojos.*;
 import org.junit.jupiter.api.*;
 
 import java.io.ByteArrayInputStream;
@@ -9,6 +9,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -103,6 +104,7 @@ class AppTest {
         App app = getAppWithSimulatedInput(userInput);
 
         // ACT: Run the application logic with the simulated input.
+        app.populate();
         app.run();
 
         // ASSERT: Verify both the output and the final state of the application.
@@ -134,5 +136,74 @@ class AppTest {
         Ticket addedTicket = (Ticket) addedItem; // Cast for specific assertions
         assertEquals(expectedDescription, addedTicket.getDescription(), "The ticket description should match the input.");
         assertEquals(expectedPrice, addedTicket.getPrice(), "The ticket price should match the input.");
+    }
+
+    @Test
+    void testEditTicket() {
+        final String expectedDescription = "Morning Gala Charity Event";
+        final double expectedPrice = 175.75;
+
+        App app = new App();
+        app.populate();
+
+        // Find a Ticket ID
+        Long ticketId = app.itemMap.entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Ticket)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No Ticket found"));
+
+        // Test editing the ticket
+        String editInput = "2\n" +
+                ticketId + "\n" +
+                expectedDescription + "\n" +
+                expectedPrice + "\n" +
+                "99\n";
+
+        App app2 = getAppWithSimulatedInput(editInput);
+        app2.itemMap.putAll(app.itemMap);
+        app2.run();
+
+        List<SaleableItem> items = app.getSaleableItems();
+
+        SaleableItem addedItem = items.stream()
+                .filter(item -> item instanceof Ticket)
+                .filter(item -> ((Ticket) item).getDescription().equals(expectedDescription))
+                .findFirst()
+                .orElse(null);
+
+        // Verify that our ticket was actually found.
+        assertNotNull(addedItem, "The newly created ticket should be found in the saleable items list.");
+
+        // Verify the properties of the found ticket.
+        assertTrue(addedItem instanceof Ticket, "The added item must be an instance of Ticket.");
+        Ticket addedTicket = (Ticket) addedItem; // Cast for specific assertions
+        assertEquals(expectedDescription, addedTicket.getDescription(), "The ticket description should match the input.");
+        assertEquals(expectedPrice, addedTicket.getPrice(), "The ticket price should match the input.");
+    }
+
+    @Test
+    void testDeleteTicket() {
+        App app = new App();
+        app.populate();
+
+        // Find a Ticket ID
+        Long ticketId = app.itemMap.entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Ticket)
+                .map(Map.Entry::getKey)
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No Ticket found"));
+
+        int initialSize = app.itemMap.size();
+
+        // Delete the ticket
+        String deleteInput = "3\n" + ticketId + "\n" + "99\n";
+
+        App app2 = getAppWithSimulatedInput(deleteInput);
+        app2.itemMap.putAll(app.itemMap);
+        app2.run();
+
+        assertEquals(initialSize - 1, app2.itemMap.size(), "The map should be 7 (8 from populate - 1 from deletion)");
+        assertFalse(app2.itemMap.containsKey(ticketId), "The map should not contain the deleted ticket ID");
     }
 }

@@ -15,6 +15,8 @@ public abstract class Publication extends Editable implements Serializable, Sale
 
     public abstract double getPrice();
 
+    public abstract String getAuthor();
+
     public Publication(){
         title = "Default Publication";
         price = -1;
