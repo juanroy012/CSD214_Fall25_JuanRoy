@@ -1,9 +1,8 @@
-package Lab1.pojos.classes;
+package Lab1.pojos;
 
 import java.time.LocalDate;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.ui.Prompt.print;
+import static Lab1.ui.Prompt.print;
 
 public class DiscMag extends Magazine{
 

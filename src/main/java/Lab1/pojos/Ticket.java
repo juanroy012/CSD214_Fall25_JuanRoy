@@ -1,7 +1,7 @@
-package Lab1.pojos.classes;
+package Lab1.pojos;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.ui.Prompt.*;
+import static Lab1.Main.itemMap;
+import static Lab1.ui.Prompt.*;
 
 
 public class Ticket extends Editable implements SaleableItem, Serializable {

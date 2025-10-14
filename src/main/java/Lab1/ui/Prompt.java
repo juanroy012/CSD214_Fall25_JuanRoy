@@ -1,8 +1,8 @@
-package Lab1.pojos.ui;
+package Lab1.ui;
 
 import java.util.Scanner;
 
-import static Lab1.pojos.ui.Menu.*;
+import static Lab1.ui.Menu.*;
 
 public class Prompt {
 

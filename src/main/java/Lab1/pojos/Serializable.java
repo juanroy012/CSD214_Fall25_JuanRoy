@@ -1,4 +1,4 @@
-package Lab1.pojos.classes;
+package Lab1.pojos;
 
 public interface Serializable {
 }

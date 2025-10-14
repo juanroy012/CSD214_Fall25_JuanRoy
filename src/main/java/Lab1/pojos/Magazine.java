@@ -1,9 +1,9 @@
-package Lab1.pojos.classes;
+package Lab1.pojos;
 
 import java.time.LocalDate;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.ui.Prompt.*;
+import static Lab1.Main.itemMap;
+import static Lab1.ui.Prompt.*;
 
 public class Magazine extends Publication{
 

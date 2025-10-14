@@ -1,11 +1,11 @@
-package Lab1.pojos.ui;
+package Lab1.ui;
 
-import Lab1.pojos.classes.*;
+import Lab1.pojos.SaleableItem;
 
 import java.util.Scanner;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.ui.Prompt.askAgain;
+import static Lab1.Main.itemMap;
+import static Lab1.ui.Prompt.askAgain;
 
 public class Interaction {
 

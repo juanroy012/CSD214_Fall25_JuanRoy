@@ -1,11 +1,10 @@
-package Lab1.pojos.ui;
+package Lab1.ui;
 
-import Lab1.pojos.classes.*;
+import Lab1.pojos.*;
 
-import static Lab1.pojos.Main.itemMap;
-import static Lab1.pojos.Main.main;
-import static Lab1.pojos.ui.Interaction.*;
-import static Lab1.pojos.ui.Prompt.*;
+import static Lab1.Main.itemMap;
+import static Lab1.ui.Interaction.*;
+import static Lab1.ui.Prompt.*;
 
 import java.util.Scanner;
 

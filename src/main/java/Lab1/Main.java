@@ -1,11 +1,11 @@
-package Lab1.pojos;
+package Lab1;
 
-import Lab1.pojos.classes.SaleableItem;
+import Lab1.pojos.SaleableItem;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static Lab1.pojos.ui.Menu.mainMenu;
+import static Lab1.ui.Menu.mainMenu;
 
 public class Main {
 
