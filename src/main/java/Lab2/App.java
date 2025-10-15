@@ -116,7 +116,7 @@ public class App {
         if (item != null) {
             editItem(item);
         } else {
-            print("Can't find the item with ID: " + choice);
+            print("Item with the ID: " + choice + " is not found.");
         }
     }
 
@@ -245,7 +245,6 @@ public class App {
                     addItem(ticket);
                 }
                 case 99 -> {
-                    break;
                 }
             }
         } catch (InputMismatchException e) {

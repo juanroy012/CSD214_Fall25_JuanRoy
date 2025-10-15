@@ -1,5 +1,7 @@
 package Lab2.pojos;
 
+import java.io.Serializable;
+
 import static Lab2.Prompt.*;
 
 public class Ticket extends Editable implements SaleableItem, Serializable {

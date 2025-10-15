@@ -1,5 +1,7 @@
 package Lab1.pojos;
 
+import java.io.Serializable;
+
 import static Lab1.Main.itemMap;
 import static Lab1.ui.Prompt.*;
 
