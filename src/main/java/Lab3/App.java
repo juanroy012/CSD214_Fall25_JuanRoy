@@ -11,8 +11,8 @@ import java.util.*;
 import static Lab2.Prompt.print;
 
 public class App {
-    private EntityManagerFactory emf;
-    private Map<Long, SaleableItem> itemMap = new HashMap<>();
+    EntityManagerFactory emf;
+    List<ProductEntity> productList = new ArrayList<>();
 
     private static final String menu = "\n***********************\n"
             + " 1. Add Items\n"
@@ -294,61 +294,52 @@ public class App {
         }
     }
 
-    public void listAny(){
-        StringBuilder listBuilder = new StringBuilder();
-        for (Long i : itemMap.keySet()) {
-            listBuilder.append(i + ". " + itemMap.get(i).toString() + "\n");
-        }
-        System.out.println(listBuilder);
-    }
-
-    private void listProducts() {
+    void listProducts() {
         EntityManager em = emf.createEntityManager();
         try {
             print(list);
             int choice = Integer.parseInt(input.nextLine());
-            List<ProductEntity> results = new ArrayList<>();
 
             switch (choice) {
                 case 1:
-                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
+                    productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
                     break;
                 case 2:
-                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
                     break;
                 case 3:
-                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
+                    productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
                     break;
                 case 4:
-                    results.addAll(em.createQuery("FROM DiscMagEntity", DiscMagEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM DiscMagEntity", DiscMagEntity.class).getResultList());
                     break;
                 case 5:
-                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
                     break;
                 case 6:
-                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
                     break;
                 case 7:
-                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
-                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
-                    results.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
+                    productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
+                    productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
+                    productList.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
+                    productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
                     break;
                 case 99:
                     break;
             }
-            if (!results.isEmpty()) {
-                print("Found " + results.size() + " items.");
-                for (ProductEntity p : results) {
+            if (!productList.isEmpty()) {
+                print("Found " + productList.size() + " items.");
+                for (ProductEntity p : productList) {
                     print(p.getProductId() + ". " + p);
                 }
             }
         } catch (InputMismatchException e) {
             System.out.println("Wrong entry, try again...");
         } catch (Exception e) {
-            print("Adding item failed!");
+            print("Listing item failed!");
         } finally {
             em.close();
         }
@@ -475,8 +466,13 @@ public class App {
         }
     }
 
-    public List<SaleableItem> getSaleableItems() {
-        return new ArrayList<>(itemMap.values());
+    public List<ProductEntity> getProducEntities(EntityManager em) {
+        productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
+        productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
+        productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
+        productList.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
+        productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
+        productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
+        return productList;
     }
-
 }

@@ -1,10 +1,7 @@
 package Lab3.entities;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
-
-import java.util.Objects;
 
 import static Lab2.Prompt.print;
 
@@ -22,6 +19,7 @@ public class BookEntity extends PublicationEntity {
     public String toString() {
         return  super.getDescription() +
                 ", Title: " + super.getTitle() +
+                ", Author: " + super.getAuthor() +
                 ", Copies: " + super.getCopies() +
                 ", Price: " + super.getPrice() +
                 ", ISBN: " + super.getIsbn();

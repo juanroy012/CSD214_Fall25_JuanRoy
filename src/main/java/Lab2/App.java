@@ -10,7 +10,7 @@ import java.util.UUID;
 import static Lab2.Prompt.*;
 
 public class App {
-    private Map<Long, SaleableItem> itemMap = new HashMap<>();
+    Map<Long, SaleableItem> itemMap = new HashMap<>();
 
     private static final String menu = "\n***********************\n"
             + " 1. Add Items\n"
