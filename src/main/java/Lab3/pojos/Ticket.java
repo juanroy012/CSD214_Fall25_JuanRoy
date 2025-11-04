@@ -1,12 +1,15 @@
-package Lab2.pojos;
+package Lab3.pojos;
 
 import java.io.Serializable;
 
-import static Lab2.Prompt.*;
+import static Lab2.Prompt.print;
 
+/**
+ * DTO for {@link Lab3.entities.TicketEntity}
+ */
 public class Ticket extends Editable implements SaleableItem, Serializable {
     private String description;
-    private double price;
+    private Double price;
 
     @Override
     public String toString() {
@@ -16,10 +19,10 @@ public class Ticket extends Editable implements SaleableItem, Serializable {
 
     public Ticket() {
         this.description = "default description";
-        this.price = 0;
+        this.price = 0.0;
     }
 
-    public Ticket(String description, double price) {
+    public Ticket(String description, Double price) {
         this.description = description;
         this.price = price;
     }

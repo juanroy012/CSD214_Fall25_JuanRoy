@@ -10,7 +10,7 @@ import java.util.UUID;
 import static Lab2.Prompt.*;
 
 public class App {
-    public Map<Long, SaleableItem> itemMap = new HashMap<>();
+    private Map<Long, SaleableItem> itemMap = new HashMap<>();
 
     private static final String menu = "\n***********************\n"
             + " 1. Add Items\n"
@@ -100,9 +100,8 @@ public class App {
     }
 
     public boolean findItemExists(SaleableItem item){
-
         return false;
-    }
+    };
 
     public SaleableItem findItem(SaleableItem item){
 
@@ -212,6 +211,9 @@ public class App {
                 break;
             case 5:
                 listAny();
+                break;
+            case 6:
+                populate();
                 break;
             case 99:
                 break;

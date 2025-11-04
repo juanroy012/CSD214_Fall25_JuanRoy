@@ -1,8 +1,11 @@
-package Lab2.pojos;
+package Lab3.pojos;
 
+/**
+ * DTO for {@link Lab3.entities.CashTillEntity}
+ */
 public class CashTill implements SaleableItem {
 
-    public static double runningTotal = 0.0;
+    private static Double runningTotal = 0.0;
 
     public CashTill() {}
 

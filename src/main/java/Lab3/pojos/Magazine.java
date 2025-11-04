@@ -1,18 +1,21 @@
-package Lab2.pojos;
+package Lab3.pojos;
 
 import java.time.LocalDate;
 
-import static Lab2.Prompt.*;
+import static Lab2.Prompt.print;
 
+/**
+ * DTO for {@link Lab3.entities.MagazineEntity}
+ */
 public class Magazine extends Publication {
 
-    private LocalDate currentIssue;
+    protected LocalDate currentIssue;
 
     public Magazine() {
         currentIssue = LocalDate.now();
     }
 
-    public Magazine(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue) {
+    public Magazine(String author, String title, Double price, int copies, String isbn, String description, LocalDate currentIssue) {
         super (author, title, price, copies, isbn, description);
         this.currentIssue = currentIssue;
     }

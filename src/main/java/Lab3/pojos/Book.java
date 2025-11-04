@@ -1,20 +1,26 @@
-package Lab2.pojos;
+package Lab3.pojos;
 
-import java.time.LocalDate;
+import Lab3.entities.BookEntity;
 
-import static Lab2.Prompt.*;
+import java.util.Objects;
 
-public class Magazine extends Publication {
+import static Lab2.Prompt.print;
 
-    private LocalDate currentIssue;
+/**
+ * DTO for {@link BookEntity}
+ */
+public class Book extends Publication {
 
-    public Magazine() {
-        currentIssue = LocalDate.now();
+    public Book() {
+        author = "Default Author";
     }
 
-    public Magazine(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue) {
-        super (author, title, price, copies, isbn, description);
-        this.currentIssue = currentIssue;
+    public Book (String author) {
+        this.author = author;
+    }
+
+    public Book(String author, String title, double price, int copies, String isbn, String description) {
+        super(author, title, price, copies, isbn, description);
     }
 
     @Override
@@ -35,23 +41,22 @@ public class Magazine extends Publication {
         return author;
     }
 
+
     @Override
     public void initialize() {
         try {
-            print("Enter Description: ");
-            description = getInput(description);
-            print("Enter Author: ");
+            print("Enter Author's name:");
             author = getInput(author);
             print("Enter Title: ");
             title = getInput(title);
-            print("Enter Price: ");
-            price = getInput(price);
             print("Enter Copies: ");
             copies = getInput(copies);
+            print("Enter Price: ");
+            price = getInput(price);
             print("Enter ISBN: ");
             isbn = getInput(isbn);
-            print("Enter the issue date (yyyy-mm-dd): ");
-            currentIssue = getInput(currentIssue);
+            print("Enter Description: ");
+            description = getInput(description);
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
         }
@@ -62,31 +67,27 @@ public class Magazine extends Publication {
         try {
             print("Enter Description: ");
             String newDescription = getInput(description);
-            if(!newDescription.isBlank()) { description = newDescription; }
+            if (!newDescription.isBlank()) description = newDescription;
 
-            print("Enter Author: ");
+            print("Enter Author's name:");
             String newAuthor = getInput(author);
-            if(!newAuthor.isBlank()) { author = newAuthor; }
+            if (!newAuthor.isBlank()) { author = newAuthor; }
 
             print("Enter Title: ");
             String newTitle = getInput(title);
             if(!newTitle.isBlank()) { title = newTitle; }
 
-            print("Enter Price: ");
-            String newPrice = getInput(String.valueOf(price));
-            if(!newPrice.isBlank()) { price = Double.parseDouble(newPrice); }
-
             print("Enter Copies: ");
             String newCopies = getInput(String.valueOf(copies));
-            if(!newCopies.isBlank()) { copies = Integer.parseInt(newCopies); }
+            if (!newCopies.isBlank()) copies = Integer.parseInt(newCopies);
+
+            print("Enter Price: ");
+            String newPrice = getInput(String.valueOf(price));
+            if (!newPrice.isBlank()) price = Double.parseDouble(newPrice);
 
             print("Enter ISBN: ");
             String newIsbn = getInput(isbn);
-            if(!newIsbn.isBlank()) { isbn = newIsbn; }
-
-            print("Enter the issue date (yyyy-mm-dd): ");
-            String newCurrentIssue = getInput(String.valueOf(currentIssue));
-            if(!newCurrentIssue.isBlank()) { currentIssue = LocalDate.parse(newCurrentIssue); }
+            if (!newIsbn.isBlank()) isbn = newIsbn;
 
         } catch (Exception e) {
             System.out.println("Enter valid type of each element on the list!");
@@ -99,21 +100,31 @@ public class Magazine extends Publication {
             print("There is no copy left for that item");
         } else {
             copies -= 1;
-            System.out.println("Magazine with the Title: " + title + "\n" +
+            System.out.println("Book with the Title: " + title + "\n" +
                     "Has been sold for: " + getPrice() + "\n" +
-                    "Copies left: " + getCopies());
+                    "Copies left: " + (getCopies()));
         }
     }
 
     @Override
     public String toString() {
         return  "Description: " + description +
-                ", Author: " + author +
                 ", Title: " + title +
-                ", Price: " + price +
                 ", Copies: " + copies +
-                ", ISBN: " + isbn +
-                ", Current Issue: " + currentIssue;
+                ", Price: " + price +
+                ", ISBN: " + isbn;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Book book)) return false;
+        if (!super.equals(o)) return false;
+        return Objects.equals(author, book.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), author);
     }
 
 }

@@ -1,9 +1,12 @@
-package Lab2.pojos;
+package Lab3.pojos;
 
 import java.time.LocalDate;
 
-import static Lab2.Prompt.*;
+import static Lab2.Prompt.print;
 
+/**
+ * DTO for {@link Lab3.entities.DiscMagEntity}
+ */
 public class DiscMag extends Magazine {
 
     private boolean hasDisc;
@@ -15,6 +18,10 @@ public class DiscMag extends Magazine {
     public DiscMag(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue, boolean hasDisc) {
         super(author, title, price, copies, isbn, description, currentIssue);
         this.hasDisc = hasDisc;
+    }
+
+    public boolean isHasDisc() {
+        return hasDisc;
     }
 
     @Override
