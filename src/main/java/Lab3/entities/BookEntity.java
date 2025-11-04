@@ -3,23 +3,34 @@ package Lab3.entities;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
-import static Lab2.Prompt.print;
+import static Lab3.Prompt.print;
 
 @Entity
 @Table(name = "book_table")
 public class BookEntity extends PublicationEntity {
 
+    private String author;
+
     public BookEntity() {}
 
     public BookEntity(String author, String title, double price, int copies, String isbn, String description) {
-        super(author, title, price, copies, isbn, description);
+        super(title, price, copies, isbn, description);
+        this.author = author;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     @Override
     public String toString() {
         return  super.getDescription() +
                 ", Title: " + super.getTitle() +
-                ", Author: " + super.getAuthor() +
+                ", Author: " + getAuthor() +
                 ", Copies: " + super.getCopies() +
                 ", Price: " + super.getPrice() +
                 ", ISBN: " + super.getIsbn();
@@ -45,8 +56,8 @@ public class BookEntity extends PublicationEntity {
             if (!newDescription.isBlank()) super.setDescription(newDescription);
 
             print("Enter Author's name:");
-            String newAuthor = getInput(super.getAuthor());
-            if (!newAuthor.isBlank()) { super.setAuthor(newAuthor); }
+            String newAuthor = getInput(getAuthor());
+            if (!newAuthor.isBlank()) { setAuthor(newAuthor); }
 
             print("Enter Title: ");
             String newTitle = getInput(super.getTitle());
@@ -73,7 +84,7 @@ public class BookEntity extends PublicationEntity {
     public void initialize() {
         try {
             print("Enter Author's name:");
-            super.setAuthor(getInput(super.getAuthor()));
+            setAuthor(getInput(getAuthor()));
             print("Enter Title: ");
             super.setTitle(getInput(super.getTitle()));
             print("Enter Copies: ");

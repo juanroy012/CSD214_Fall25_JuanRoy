@@ -9,7 +9,6 @@
 
         <!-- List all your entity classes here -->
         <class>Lab3.entities.BookEntity</class>
-        <class>Lab3.entities.CashTillEntity</class>
         <class>Lab3.entities.ComicBookEntity</class>
         <class>Lab3.entities.DiscMagEntity</class>
         <class>Lab3.entities.MagazineEntity</class>
@@ -30,7 +29,7 @@
             <property name="hibernate.hbm2ddl.auto" value="create"/>
 
             <!-- Optional: Show the SQL that Hibernate generates -->
-            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>
     </persistence-unit>

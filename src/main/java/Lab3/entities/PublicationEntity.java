@@ -1,7 +1,6 @@
 package Lab3.entities;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.MappedSuperclass;
 
 @MappedSuperclass
@@ -15,9 +14,6 @@ public abstract class PublicationEntity extends ProductEntity {
     @Column(name = "copies")
     private int copies;
 
-    @Column(name = "author")
-    private String author;
-
     @Column(name = "isbn")
     private String isbn;
 
@@ -26,8 +22,7 @@ public abstract class PublicationEntity extends ProductEntity {
 
     public PublicationEntity() {};
 
-    public PublicationEntity(String author, String title, double price, int copies, String isbn, String description) {
-        this.author = author;
+    public PublicationEntity(String title, double price, int copies, String isbn, String description) {
         this.title = title;
         this.price = price;
         this.copies = copies;
@@ -57,14 +52,6 @@ public abstract class PublicationEntity extends ProductEntity {
 
     public void setCopies(int copies) {
         this.copies = copies;
-    }
-
-    public String getAuthor() {
-        return author;
-    }
-
-    public void setAuthor(String author) {
-        this.author = author;
     }
 
     public String getIsbn() {

@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static Lab2.Prompt.print;
+import static Lab3.Prompt.print;
 
 @Entity
 public class DiscMagEntity extends MagazineEntity {
@@ -17,8 +17,8 @@ public class DiscMagEntity extends MagazineEntity {
         hasDisc = false;
     }
 
-    public DiscMagEntity(String author, String title, double price, int copies, String isbn, String description, LocalDate currentIssue, boolean hasDisc) {
-        super(author, title, price, copies, isbn, description, currentIssue);
+    public DiscMagEntity(String title, double price, int copies, String isbn, String description, LocalDate currentIssue, boolean hasDisc) {
+        super(title, price, copies, isbn, description, currentIssue);
         this.hasDisc = hasDisc;
 
     }

@@ -18,6 +18,7 @@ public class App {
             + " 3. Delete Items\n"
             + " 4. Sell item(s)\n"
             + " 5. List items\n"
+            + " 6. Populate\n"
             + "99. Quit\n"
             + "***********************\n"
             + "Enter choice: ";

@@ -61,11 +61,9 @@ public class Util {
         String title = fakeBook.title();
         double price = number.randomDouble(2, 10, 100);
         int copies = number.numberBetween(1, 20);
-        String author = fakeBook.author();
         String isbn = code.isbn10();
         String description = "Magazine: " + fakeBook.genre();
         return new MagazineEntity(
-                author,
                 title,
                 price,
                 copies,
@@ -79,12 +77,10 @@ public class Util {
         String title = fakeBook.title();
         double price = number.randomDouble(2, 10, 100);
         int copies = number.numberBetween(1, 20);
-        String author = fakeBook.author();
         String isbn = code.isbn10();
         String description = "Magazine: " + fakeBook.genre();
         var random = new java.util.Random();
         return new DiscMagEntity(
-                author,
                 title,
                 price,
                 copies,

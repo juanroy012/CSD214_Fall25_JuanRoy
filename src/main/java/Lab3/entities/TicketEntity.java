@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 
 import java.util.Objects;
 
-import static Lab2.Prompt.print;
+import static Lab3.Prompt.print;
 
 @Entity
 @Table(name = "ticket_table")

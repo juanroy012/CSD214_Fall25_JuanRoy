@@ -35,7 +35,7 @@ public abstract class ProductEntity extends Editable implements Serializable, Sa
     }
 
     public ProductEntity() {
-        setProductId(UUID.randomUUID().toString());
+        setProductId(String.valueOf((UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)/1000000000));
     }
 //
 //    public ProductEntity(String productId) {

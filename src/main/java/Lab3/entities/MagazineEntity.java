@@ -2,13 +2,15 @@ package Lab3.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 import java.time.LocalDate;
 import java.util.Objects;
 
-import static Lab2.Prompt.print;
+import static Lab3.Prompt.print;
 
 @Entity
+@Table(name = "magazine_table")
 public class MagazineEntity extends PublicationEntity {
     @Column(name = "current_issue")
     private LocalDate currentIssue;
@@ -17,15 +19,14 @@ public class MagazineEntity extends PublicationEntity {
         currentIssue = LocalDate.now();
     }
 
-    public MagazineEntity(String author, String title, Double price, int copies, String isbn, String description, LocalDate currentIssue) {
-        super (author, title, price, copies, isbn, description);
+    public MagazineEntity(String title, Double price, int copies, String isbn, String description, LocalDate currentIssue) {
+        super (title, price, copies, isbn, description);
         this.currentIssue = currentIssue;
     }
 
     @Override
     public String toString() {
         return  super.getDescription() +
-                ", Author: " + super.getAuthor() +
                 ", Title: " + super.getTitle() +
                 ", Price: " + super.getPrice() +
                 ", Copies: " + super.getCopies() +
@@ -58,8 +59,6 @@ public class MagazineEntity extends PublicationEntity {
         try {
             print("Enter Description: ");
             super.setDescription(getInput(super.getDescription()));
-            print("Enter Author: ");
-            super.setAuthor(getInput(super.getAuthor()));
             print("Enter Title: ");
             super.setTitle(getInput(super.getTitle()));
             print("Enter Price: ");
@@ -81,10 +80,6 @@ public class MagazineEntity extends PublicationEntity {
             print("Enter Description: ");
             String newDescription = getInput(super.getDescription());
             if(!newDescription.isBlank()) { super.setDescription(newDescription); }
-
-            print("Enter Author: ");
-            String newAuthor = getInput(super.getAuthor());
-            if(!newAuthor.isBlank()) { super.setAuthor(newAuthor); }
 
             print("Enter Title: ");
             String newTitle = getInput(super.getTitle());

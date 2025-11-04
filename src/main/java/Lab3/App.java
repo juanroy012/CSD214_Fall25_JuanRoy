@@ -8,77 +8,84 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.*;
 
-import static Lab2.Prompt.print;
+import static Lab3.Prompt.print;
 
 public class App {
     EntityManagerFactory emf;
     List<ProductEntity> productList = new ArrayList<>();
 
-    private static final String menu = "\n***********************\n"
-            + " 1. Add Items\n"
-            + " 2. Edit Items\n"
-            + " 3. Delete Items\n"
-            + " 4. Sell item(s)\n"
-            + " 5. List items\n"
-            + "99. Quit\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String menu = """
+            ***********************
+             1. Add Items
+             2. Edit Items
+             3. Delete Items
+             4. Sell item(s)
+             5. List items
+             6. Populate
+            99. Quit
+            ***********************
+            Enter choice:\s""";
 
-    private static final String add = "\n***********************\n"
-            + " 1. Add Book\n"
-            + " 2. Add Comic Book\n"
-            + " 3. Add Magazine\n"
-            + " 4. Add Disc Magazine\n"
-            + " 5. Add Ticket\n"
-            + " 6. Add Pencil\n"
-            + "99. Back\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String add = """
+            ***********************
+             1. Add Book
+             2. Add Comic Book
+             3. Add Magazine
+             4. Add Disc Magazine
+             5. Add Ticket
+             6. Add Pencil
+            99. Back
+            ***********************
+            Enter choice:\s""";
 
-    private static final String delete = "\n***********************\n"
-            + " 1. Delete Book\n"
-            + " 2. Delete Comic Book\n"
-            + " 3. Delete Magazine\n"
-            + " 4. Delete Disc Magazine\n"
-            + " 5. Delete Ticket\n"
-            + " 6. Delete Pencil\n"
-            + "99. Back\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String delete = """
+            ***********************
+             1. Delete Book
+             2. Delete Comic Book
+             3. Delete Magazine
+             4. Delete Disc Magazine
+             5. Delete Ticket
+             6. Delete Pencil
+            99. Back
+            ***********************
+            Enter choice:\s""";
 
-    private static final String edit = "\n***********************\n"
-            + " 1. Edit Book\n"
-            + " 2. Edit Comic Book\n"
-            + " 3. Edit Magazine\n"
-            + " 4. Edit Disc Magazine\n"
-            + " 5. Edit Ticket\n"
-            + " 6. Edit Pencil\n"
-            + "99. Back\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String edit = """
+            ***********************
+             1. Edit Book
+             2. Edit Comic Book
+             3. Edit Magazine
+             4. Edit Disc Magazine
+             5. Edit Ticket
+             6. Edit Pencil
+            99. Back
+            ***********************
+            Enter choice:\s""";
 
-    private static final String sell = "\n***********************\n"
-            + " 1. Sell Book\n"
-            + " 2. Sell Comic Book\n"
-            + " 3. Sell Magazine\n"
-            + " 4. Sell Disc Magazine\n"
-            + " 5. Sell Ticket\n"
-            + " 6. Sell Pencil\n"
-            + "99. Back\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String sell = """
+            ***********************
+             1. Sell Book
+             2. Sell Comic Book
+             3. Sell Magazine
+             4. Sell Disc Magazine
+             5. Sell Ticket
+             6. Sell Pencil
+            99. Back
+            ***********************
+            Enter choice:\s""";
 
-    private static final String list = "\n***********************\n"
-            + " 1. List Book\n"
-            + " 2. List Comic Book\n"
-            + " 3. List Magazine\n"
-            + " 4. List Disc Magazine\n"
-            + " 5. List Ticket\n"
-            + " 6. List Pencil\n"
-            + " 7. List All Items\n"
-            + "99. Back\n"
-            + "***********************\n"
-            + "Enter choice: ";
+    private static final String list = """
+            ***********************
+             1. List Book
+             2. List Comic Book
+             3. List Magazine
+             4. List Disc Magazine
+             5. List Ticket
+             6. List Pencil
+             7. List All Items
+            99. Back
+            ***********************
+            Enter choice:\s""";
 
     public static Scanner input;
     private final PrintStream out;
@@ -138,6 +145,7 @@ public class App {
                 print("Unknown Exception : " + e.getMessage());
             }
         }
+        em.close();
     }
 
     public boolean findItemExists(SaleableItem item){
@@ -299,40 +307,41 @@ public class App {
         try {
             print(list);
             int choice = Integer.parseInt(input.nextLine());
+            List<ProductEntity> results = new ArrayList<>();
 
             switch (choice) {
                 case 1:
-                    productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
+                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
                     break;
                 case 2:
-                    productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
                     break;
                 case 3:
-                    productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
+                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
                     break;
                 case 4:
-                    productList.addAll(em.createQuery("FROM DiscMagEntity", DiscMagEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM DiscMagEntity", DiscMagEntity.class).getResultList());
                     break;
                 case 5:
-                    productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
                     break;
                 case 6:
-                    productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
                     break;
                 case 7:
-                    productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
-                    productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
-                    productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
-                    productList.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
-                    productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
-                    productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
+                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
+                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
+                    results.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
+                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
                     break;
                 case 99:
                     break;
             }
-            if (!productList.isEmpty()) {
-                print("Found " + productList.size() + " items.");
-                for (ProductEntity p : productList) {
+            if (!results.isEmpty()) {
+                print("Found " + results.size() + " items.");
+                for (ProductEntity p : results) {
                     print(p.getProductId() + ". " + p);
                 }
             }
