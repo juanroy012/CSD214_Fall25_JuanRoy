@@ -40,8 +40,8 @@ public class App {
 
 
     public static Scanner input;
-    private final PrintStream out;
-    private final ProductService productService;
+    public final PrintStream out;
+    public final ProductService productService;
 
 
     /**
