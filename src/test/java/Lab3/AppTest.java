@@ -31,32 +31,15 @@ public class AppTest {
     private App appH2;
     private App app;
     private ByteArrayOutputStream outContent;
-    private EntityManagerFactory emf;
 
     @BeforeAll
     public void setup() {
-        emf = Persistence.createEntityManagerFactory("product-pu");
         outContent = new ByteArrayOutputStream();
         appInMemory = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new InMemoryProductRepository()));
         appMySql = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new MySQLProductRepository()));
         appH2 = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new H2ProductRepository()));
         testOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOut));
-    }
-
-    @AfterEach
-    public void cleanup() {
-        // Optional: clear DB after each test
-        EntityManager em = emf.createEntityManager();
-        em.getTransaction().begin();
-        em.createQuery("DELETE FROM BookEntity").executeUpdate();
-        em.getTransaction().commit();
-        em.close();
-    }
-
-    @AfterAll
-    public void teardown() {
-        emf.close();
     }
 
     private App getAppWithSimulatedInput(String input, ProductService productService) {
@@ -73,9 +56,9 @@ public class AppTest {
         List<ProductEntity> inMemoryOutput = appInMemory.productService.getAllProducts();
         List<ProductEntity> MySqlOutput = appMySql.productService.getAllProducts();
         List<ProductEntity> H2Output = appH2.productService.getAllProducts();
-        assertTrue(inMemoryOutput.size() > 0, "There should be more than one item in the list");
-        assertTrue(MySqlOutput.size() > 0, "There should be more than one item in the list");
-        assertTrue(H2Output.size() > 0, "There should be more than one item in the list");
+        assertTrue(inMemoryOutput.size() > 10, "There should be more than one item in the list");
+        assertTrue(MySqlOutput.size() > 10, "There should be more than one item in the list");
+        assertTrue(H2Output.size() > 10, "There should be more than one item in the list");
     }
 
     @Test

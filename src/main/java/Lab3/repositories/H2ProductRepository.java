@@ -26,7 +26,7 @@ public class H2ProductRepository implements Repository<ProductEntity> {
      */
     public H2ProductRepository() {
         // The name "h2" must match the persistence-unit name in persistence.xml
-        this.emf = Persistence.createEntityManagerFactory("product-pu");
+        this.emf = Persistence.createEntityManagerFactory("h2");
     }
 
 

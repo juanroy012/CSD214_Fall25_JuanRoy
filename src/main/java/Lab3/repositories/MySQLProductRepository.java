@@ -28,7 +28,7 @@ public class MySQLProductRepository implements Repository<ProductEntity> {
      */
     public MySQLProductRepository() {
         // The name "default" must match the persistence-unit name for MySQL in persistence.xml
-        this.emf = Persistence.createEntityManagerFactory("product-pu");
+        this.emf = Persistence.createEntityManagerFactory("default");
     }
 
 

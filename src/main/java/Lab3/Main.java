@@ -18,7 +18,7 @@ public class Main {
         System.out.println("Select the repository to use:");
         System.out.println("1. In-Memory (data is temporary, resets on restart)");
         System.out.println("2. MySQL (data is persistent)");
-        System.out.println("3. H2 (data is persistent)");
+        System.out.println("3. H2 (data is temporary unless written to a file)");
         System.out.print("Enter choice: ");
 
         String choice = scanner.nextLine();
