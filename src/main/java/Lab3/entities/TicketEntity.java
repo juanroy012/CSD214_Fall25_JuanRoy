@@ -2,14 +2,12 @@ package Lab3.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
 
 import java.util.Objects;
 
 import static Lab3.Prompt.print;
 
 @Entity
-@Table(name = "ticket_table")
 public class TicketEntity extends ProductEntity {
     @Column(name = "description")
     private String description;

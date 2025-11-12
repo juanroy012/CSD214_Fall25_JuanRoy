@@ -127,5 +127,4 @@ public class AppTest {
         String output = outContent.toString();
         assertTrue(output.contains("Found"), "Output should indicate items found");
     }
-
 }

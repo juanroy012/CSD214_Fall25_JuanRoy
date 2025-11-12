@@ -2,6 +2,7 @@ package Lab3;
 
 import Lab3.entities.*;
 import Lab3.pojos.*;
+import Lab3.services.ProductService;
 import jakarta.persistence.*;
 
 import java.io.InputStream;
@@ -12,7 +13,6 @@ import static Lab3.Prompt.print;
 
 public class App {
     EntityManagerFactory emf;
-    List<ProductEntity> productList = new ArrayList<>();
 
     private static final String menu = """
             ***********************
@@ -38,73 +38,28 @@ public class App {
             ***********************
             Enter choice:\s""";
 
-    private static final String delete = """
-            ***********************
-             1. Delete Book
-             2. Delete Comic Book
-             3. Delete Magazine
-             4. Delete Disc Magazine
-             5. Delete Ticket
-             6. Delete Pencil
-            99. Back
-            ***********************
-            Enter choice:\s""";
-
-    private static final String edit = """
-            ***********************
-             1. Edit Book
-             2. Edit Comic Book
-             3. Edit Magazine
-             4. Edit Disc Magazine
-             5. Edit Ticket
-             6. Edit Pencil
-            99. Back
-            ***********************
-            Enter choice:\s""";
-
-    private static final String sell = """
-            ***********************
-             1. Sell Book
-             2. Sell Comic Book
-             3. Sell Magazine
-             4. Sell Disc Magazine
-             5. Sell Ticket
-             6. Sell Pencil
-            99. Back
-            ***********************
-            Enter choice:\s""";
-
-    private static final String list = """
-            ***********************
-             1. List Book
-             2. List Comic Book
-             3. List Magazine
-             4. List Disc Magazine
-             5. List Ticket
-             6. List Pencil
-             7. List All Items
-            99. Back
-            ***********************
-            Enter choice:\s""";
 
     public static Scanner input;
     private final PrintStream out;
+    private final ProductService productService;
 
-    // Default constructor for normal execution
-    public App() {
-        this(System.in, System.out);
-    }
-    // Constructor for testing
-    public App(InputStream in, PrintStream out) {
+
+    /**
+     * Constructs the App with all its required dependencies.
+     * @param in The input stream for user interaction (e.g., System.in).
+     * @param out The output stream for displaying information (e.g., System.out).
+     * @param productService The service that handles business logic.
+     */
+    public App(InputStream in, PrintStream out, ProductService productService) {
         this.input = new Scanner(in);
         this.out = out;
+        this.productService = productService;
     }
 
     // Methods
 
     public void run(){
-        emf = Persistence.createEntityManagerFactory("product-pu");
-        EntityManager em = emf.createEntityManager();
+
         boolean quit = false;
         while (!quit) {
             try {
@@ -124,7 +79,7 @@ public class App {
                         sellItem();
                         break;
                     case 5:
-                        listProducts();
+                        listAny();
                         break;
                     case 6:
                         populate();;
@@ -142,10 +97,9 @@ public class App {
             } catch (InputMismatchException e) {
                 print("Wrong entry, try again...");
             } catch (Exception e) {
-                print("Unknown Exception : " + e.getMessage());
+                print("Enter only numbers on the list!");
             }
         }
-        em.close();
     }
 
     public boolean findItemExists(SaleableItem item){
@@ -158,200 +112,99 @@ public class App {
     }
 
     public void editItem(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-        print(edit);
-        int choice = Integer.parseInt(input.nextLine());
-        print("Enter Product ID: ");
-        String productId = input.nextLine().trim();
+        listAny(); // Show the user the items they can edit
+        out.print("\nEnter the ID of the item to edit: ");
+        String idStr = input.nextLine();
+        long id;
+
         try {
-            switch(choice) {
-                case 1:
-                    BookEntity book = em.createQuery("SELECT b FROM BookEntity b WHERE b.productId = :id", BookEntity.class).setParameter("id", productId).getSingleResult();
-                    if (book == null) {
-                        print("Book is not found!");
-                        break;
-                    }
-                    book.edit();
-                    break;
-                case 2:
-                    ComicBookEntity comicBook = em.createQuery("SELECT cb FROM ComicBookEntity cb WHERE cb.productId = :id", ComicBookEntity.class).setParameter("id", productId).getSingleResult();
-                    if (comicBook == null) {
-                        print("Comic Book is not found!");
-                        break;
-                    }
-                    comicBook.edit();
-                    break;
-                case 3:
-                    MagazineEntity magazine = em.createQuery("SELECT m FROM MagazineEntity m WHERE m.productId = :id", MagazineEntity.class).setParameter("id", productId).getSingleResult();
-                    if (magazine == null) {
-                        print("Magazine is not found!");
-                        break;
-                    }
-                    magazine.edit();
-                    break;
-                case 4:
-                     DiscMagEntity discMag = em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE dm.productId = :id", DiscMagEntity.class).setParameter("id", productId).getSingleResult();
-                    if (discMag == null) {
-                        print("Disc Magazine is not found!");
-                        break;
-                    }
-                    discMag.edit();
-                    break;
-                case 5:
-                    TicketEntity ticket = em.createQuery("SELECT t FROM TicketEntity t WHERE t.productId = :id", TicketEntity.class).setParameter("id", productId).getSingleResult();
-                    if (ticket == null) {
-                        print("Ticket is not found!");
-                        break;
-                    }
-                    ticket.edit();
-                    break;
-                case 6:
-                    PencilEntity pencil = em.createQuery("SELECT p FROM PencilEntity p WHERE p.productId = :id", PencilEntity.class).setParameter("id", productId).getSingleResult();
-                    if (pencil == null) {
-                        print("Pencil is not found!");
-                        break;
-                    }
-                    pencil.edit();
-                    break;
-                case 99:
-                    break;
-            }
-            tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            print("Edit Item Failed!");
-        } finally {
-            em.close();
+            id = Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            out.println("Invalid ID format. Please enter a number.");
+            return;
+        }
+
+        Optional<ProductEntity> productOpt = productService.getProductById(id);
+
+        if (productOpt.isPresent()) {
+            ProductEntity productToEdit = productOpt.get();
+
+            // Delegate the editing process to the object itself
+            productToEdit.edit();
+
+            // Save the updated object back to the repository
+            productService.saveProduct(productToEdit);
+            out.println("Item with ID " + id + " updated successfully.");
+        } else {
+            out.println("Item with ID " + id + " not found.");
         }
     }
 
     public void deleteItem(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        Query query = null;
-        print(delete);
-        int choice = Integer.parseInt(input.nextLine());
-        print("Enter Product ID: ");
-        String productId = input.nextLine().trim();
+        listAny(); // Show the user the items they can edit
+        out.print("\nEnter the ID of the item to delete: ");
+        String idStr = input.nextLine();
+        long id;
 
-        tx.begin();
         try {
-            switch (choice) {
-                case 1:
-                    query = em.createQuery("DELETE FROM BookEntity b WHERE b.productId = :id");
-                    break;
-                case 2:
-                    query = em.createQuery("DELETE FROM ComicBookEntity cb WHERE cb.productId = :id");
-                    break;
-                case 3:
-                    query = em.createQuery("DELETE FROM MagazineEntity m WHERE m.productId = :id");
-                    break;
-                case 4:
-                    query = em.createQuery("DELETE FROM DiscMagEntity dm WHERE dm.productId = :id");
-                    break;
-                case 5:
-                    query = em.createQuery("DELETE FROM TicketEntity t WHERE t.productId = :id");
-                    break;
-                case 6:
-                    query = em.createQuery("DELETE FROM PencilEntity p WHERE p.productId = :id");
-                    break;
-                case 99:
-                    break;
-            }
+            id = Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            out.println("Invalid ID format. Please enter a number.");
+            return;
+        }
 
-            query.setParameter("id", productId);
-            int deletedCount = query.executeUpdate();
-            System.out.println("Deleted " + deletedCount + " item(s).");
-            tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            print("Delete Item Failed!");
-        } finally {
-            em.close();
+        Optional<ProductEntity> productOpt = productService.getProductById(id);
+
+        if (productOpt.isPresent()) {
+            productService.deleteProduct(id);
+            out.println("Item with ID " + id + " deleted successfully.");
+        } else {
+            out.println("Item with ID " + id + " not found.");
         }
     }
 
     public void populate(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-
-        try {
-            tx.begin();
-
-            print("Populating database with products...");
-            for (int i = 0; i < 2; i++) {
-                em.persist(Util.getFakeBook());
-                em.persist(Util.getFakeComic());
-                em.persist(Util.getFakeMagazine());
-                em.persist(Util.getFakeDiscMag());
-                em.persist(Util.getFakeTicket());
-                em.persist(Util.getFakePencil());
-            }
-
-            tx.commit();
-            print("Population complete.");
-        } catch (Exception e) {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
-            print("Populating database failed!");
-        } finally {
-            em.close();
+        for (int i = 0; i<2 ;i++) {
+            productService.saveProduct(Util.getFakeBook());
+            productService.saveProduct(Util.getFakeComic());
+            productService.saveProduct(Util.getFakeMagazine());
+            productService.saveProduct(Util.getFakeDiscMag());
+            productService.saveProduct(Util.getFakeTicket());
+            productService.saveProduct(Util.getFakePencil());
         }
     }
+    public void listAny(){
+        out.println("\n--- All Items in Inventory ---");
+        List<ProductEntity> products = productService.getAllProducts();
 
-    void listProducts() {
-        EntityManager em = emf.createEntityManager();
-        try {
-            print(list);
-            int choice = Integer.parseInt(input.nextLine());
-            List<ProductEntity> results = new ArrayList<>();
-
-            switch (choice) {
-                case 1:
-                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
-                    break;
-                case 2:
-                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
-                    break;
-                case 3:
-                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
-                    break;
-                case 4:
-                    results.addAll(em.createQuery("FROM DiscMagEntity", DiscMagEntity.class).getResultList());
-                    break;
-                case 5:
-                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
-                    break;
-                case 6:
-                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
-                    break;
-                case 7:
-                    results.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
-                    results.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
-                    results.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
-                    results.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
-                    break;
-                case 99:
-                    break;
-            }
-            if (!results.isEmpty()) {
-                print("Found " + results.size() + " items.");
-                for (ProductEntity p : results) {
-                    print(p.getProductId() + ". " + p);
+        if (products.isEmpty()) {
+            out.println("No items found.");
+        } else {
+            for (ProductEntity product : products) {
+                switch (product) {
+                    case ComicBookEntity comicBook ->
+                            out.printf("ID: %d | Type: Comic Book   | Title: %s | Author: %s | Price: $%.2f | Copies: %d | Colorized: %b%n",
+                                    comicBook.getId(), comicBook.getTitle(), comicBook.getAuthor(), comicBook.getPrice(), comicBook.getCopies(), comicBook.getColorized());
+                    case BookEntity book ->
+                            out.printf("ID: %d | Type: Book   | Title: %s | Author: %s | Price: $%.2f | Copies: %d%n",
+                                    book.getId(), book.getTitle(), book.getAuthor(), book.getPrice(), book.getCopies());
+                    case DiscMagEntity discMag ->
+                            out.printf("ID: %d | Type: Disc Magazine   | Title: %s | Price: $%.2f | Copies: %d | Current Issue: %tD | Has Disc: %b%n",
+                                    discMag.getId(), discMag.getTitle(), discMag.getPrice(), discMag.getCopies(), discMag.getCurrentIssue(), discMag.getHasDisc());
+                    case MagazineEntity magazine ->
+                            out.printf("ID: %d | Type: Magazine   | Title: %s | Price: $%.2f | Copies: %d | Current Issue: %tD%n",
+                                    magazine.getId(), magazine.getTitle(), magazine.getPrice(), magazine.getCopies(), magazine.getCurrentIssue());
+                    case TicketEntity ticket -> out.printf("ID: %d | Type: Ticket | Description: %s | Price: $%.2f%n",
+                            ticket.getId(), ticket.getDescription(), ticket.getPrice());
+                    case PencilEntity pencil -> out.printf("ID: %d | Type: Pencil | Description: %s | Quantity: %d | Price: $%.2f%n",
+                            pencil.getId(), pencil.getDescription(), pencil.getQuantity(), pencil.getPrice());
+                    default ->
+                        // Fallback for any other product types
+                            out.println(product.toString());
                 }
             }
-        } catch (InputMismatchException e) {
-            System.out.println("Wrong entry, try again...");
-        } catch (Exception e) {
-            print("Listing item failed!");
-        } finally {
-            em.close();
         }
+        out.println("------------------------------");
     }
 
     public SaleableItem getItem(SaleableItem item){
@@ -359,129 +212,101 @@ public class App {
     }
 
     public void sellItem(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        tx.begin();
-
-        print(sell);
-        int choice = Integer.parseInt(input.nextLine());
-        print("Enter Product ID: ");
-        String productId = input.nextLine().trim();
+        listAny(); // Show the user the items they can edit
+        out.print("\nEnter the ID of the item to sell: ");
+        String idStr = input.nextLine();
+        long id;
 
         try {
-            switch(choice) {
-                case 1:
-                    BookEntity book = em.createQuery("SELECT b FROM BookEntity b WHERE b.productId = :id", BookEntity.class).setParameter("id", productId).getSingleResult();
-                    if (book == null) {
-                        print("Book is not found!");
-                        break;
-                    }
-                    book.sellItem();
-                    break;
-                case 2:
-                    ComicBookEntity comicBook = em.createQuery("SELECT cb FROM ComicBookEntity cb WHERE cb.productId = :id", ComicBookEntity.class).setParameter("id", productId).getSingleResult();
-                    if (comicBook == null) {
-                        print("Comic Book is not found!");
-                        break;
-                    }
-                    comicBook.sellItem();
-                    break;
-                case 3:
-                    MagazineEntity magazine = em.createQuery("SELECT m FROM MagazineEntity m WHERE m.productId = :id", MagazineEntity.class).setParameter("id", productId).getSingleResult();
-                    if (magazine == null) {
-                        print("Magazine is not found!");
-                        break;
-                    }
-                    magazine.sellItem();
-                    break;
-                case 4:
-                    DiscMagEntity discMag = em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE dm.productId = :id", DiscMagEntity.class).setParameter("id", productId).getSingleResult();
-                    if (discMag == null) {
-                        print("Disc Magazine is not found!");
-                        break;
-                    }
-                    discMag.sellItem();
-                    break;
-                case 5:
-                    TicketEntity ticket = em.createQuery("SELECT t FROM TicketEntity t WHERE t.productId = :id", TicketEntity.class).setParameter("id", productId).getSingleResult();
-                    if (ticket == null) {
-                        print("Ticket is not found!");
-                        break;
-                    }
-                    ticket.sellItem();
-                    break;
-                case 6:
-                    PencilEntity pencil = em.createQuery("SELECT p FROM PencilEntity p WHERE p.productId = :id", PencilEntity.class).setParameter("id", productId).getSingleResult();
-                    if (pencil == null) {
-                        print("Pencil is not found!");
-                        break;
-                    }
-                    pencil.sellItem();
-                    break;
-                case 99:
-                    break;
-            }
-            tx.commit();
-        } catch (Exception e) {
-            if (tx.isActive()) tx.rollback();
-            print("Sell Item Failed!");
-        } finally {
-            em.close();
+            id = Long.parseLong(idStr);
+        } catch (NumberFormatException e) {
+            out.println("Invalid ID format. Please enter a number.");
+            return;
+        }
+
+        Optional<ProductEntity> productOpt = productService.getProductById(id);
+
+        if (productOpt.isPresent()) {
+            productOpt.ifPresent(ProductEntity::sellItem);
+            out.println("Item with ID " + id + " deleted successfully.");
+        } else {
+            out.println("Item with ID " + id + " not found.");
         }
     }
 
-    public void addItem(){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        print(add);
-        int choice = Integer.parseInt(input.nextLine());
-
+    public void addItem() {
         try {
-            tx.begin();
+            print(add);
+            int choice = Integer.parseInt(input.nextLine());
             switch (choice) {
                 case 1 -> {
                     BookEntity book = new BookEntity();
                     book.initialize();
-                    em.persist(book);
+                    if (!book.toString().contains("null") && book.getPrice() != 0) {
+                        ProductEntity savedBook = productService.saveProduct(book);
+                        out.println("Book added successfully with ID: " + savedBook.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
                 }
                 case 2 -> {
-                    MagazineEntity magazine = new MagazineEntity();
-                    magazine.initialize();
-                    em.persist(magazine);
+                    ComicBookEntity comicBook = new ComicBookEntity();
+                    comicBook.initialize();
+                    if (!comicBook.toString().contains("null") && comicBook.getPrice() != 0) {
+                        ProductEntity savedComicBook = productService.saveProduct(comicBook);
+                        out.println("Comic Book added successfully with ID: " + savedComicBook.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
                 }
                 case 3 -> {
-                    DiscMagEntity discMag = new DiscMagEntity();
-                    discMag.initialize();
-                    em.persist(discMag);
+                    MagazineEntity magazine = new MagazineEntity();
+                    magazine.initialize();
+                    if (magazine.toString().contains("null") || magazine.getPrice() != 0) {
+                        ProductEntity savedMagazine = productService.saveProduct(magazine);
+                        out.println("Magazine added successfully with ID: " + savedMagazine.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
                 }
                 case 4 -> {
+                    DiscMagEntity discMag = new DiscMagEntity();
+                    discMag.initialize();
+                    if (discMag.toString().contains("null") || discMag.getPrice() != 0) {
+                        ProductEntity savedDiscMag = productService.saveProduct(discMag);
+                        out.println("DiscMag added successfully with ID: " + savedDiscMag.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
+                }
+                case 5 -> {
                     TicketEntity ticket = new TicketEntity();
                     ticket.initialize();
-                    em.persist(ticket);
+                    if (!ticket.toString().contains("null") && ticket.getPrice() != 0) {
+                        ProductEntity savedTicket = productService.saveProduct(ticket);
+                        out.println("Ticket added successfully with ID: " + savedTicket.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
+                }
+                case 6 -> {
+                    PencilEntity pencil = new PencilEntity();
+                    pencil.initialize();
+                    if (!pencil.toString().contains("null") && pencil.getPrice() != 0) {
+                        ProductEntity savedPencil = productService.saveProduct(pencil);
+                        out.println("Pencil added successfully with ID: " + savedPencil.getId());
+                    } else {
+                        print("Adding item failed");
+                    }
                 }
                 case 99 -> {
+                    return;
                 }
             }
-            tx.commit();
         } catch (InputMismatchException e) {
             System.out.println("Wrong entry, try again...");
         } catch (Exception e) {
-            if (tx.isActive()) {
-                tx.rollback();
-            }
             print("Adding item failed!");
-        } finally {
-            em.close();
         }
-    }
-
-    public List<ProductEntity> getProducEntities(EntityManager em) {
-        productList.addAll(em.createQuery("SELECT b FROM BookEntity b WHERE TYPE(b) = BookEntity", BookEntity.class).getResultList());
-        productList.addAll(em.createQuery("FROM ComicBookEntity ", ComicBookEntity.class).getResultList());
-        productList.addAll(em.createQuery("SELECT m FROM MagazineEntity m WHERE TYPE(m) = MagazineEntity", MagazineEntity.class).getResultList());
-        productList.addAll(em.createQuery("SELECT dm FROM DiscMagEntity dm WHERE TYPE(dm) = DiscMagEntity ", DiscMagEntity.class).getResultList());
-        productList.addAll(em.createQuery("FROM TicketEntity", TicketEntity.class).getResultList());
-        productList.addAll(em.createQuery("FROM PencilEntity ", PencilEntity.class).getResultList());
-        return productList;
     }
 }

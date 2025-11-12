@@ -8,7 +8,8 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
-@MappedSuperclass
+@Entity
+@Table(name = "product_table")
 public abstract class ProductEntity extends Editable implements Serializable, SaleableItem {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

@@ -9,7 +9,6 @@ import java.util.Objects;
 import static Lab3.Prompt.print;
 
 @Entity
-@Table(name = "pencil_table")
 public class PencilEntity extends ProductEntity {
     @Column(name = "quantity")
     private int quantity;

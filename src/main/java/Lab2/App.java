@@ -147,7 +147,11 @@ public class App {
     public void listAny(){
         StringBuilder listBuilder = new StringBuilder();
         for (Long i : itemMap.keySet()) {
-            listBuilder.append(i + ". " + itemMap.get(i).toString() + "\n");
+            listBuilder.append("Product ID: ")
+                    .append(i)
+                    .append(". ")
+                    .append(itemMap.get(i).toString())
+                    .append("\n");
         }
         System.out.println(listBuilder);
     }
@@ -181,7 +185,8 @@ public class App {
                     print("Item list:\n");
                     found = true;
                 }
-                listBuilder.append(i)
+                listBuilder.append("Product ID: ")
+                        .append(i)
                         .append(". ")
                         .append(itemType)
                         .append("\n");
@@ -212,9 +217,6 @@ public class App {
                 break;
             case 5:
                 listAny();
-                break;
-            case 6:
-                populate();
                 break;
             case 99:
                 break;
@@ -258,7 +260,7 @@ public class App {
     }
 
     public void addItem(SaleableItem item){
-        long id = UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE;
+        long id = (UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE)/1000000000;
         switch(item) {
             case Book book:
                 itemMap.put(id, book);

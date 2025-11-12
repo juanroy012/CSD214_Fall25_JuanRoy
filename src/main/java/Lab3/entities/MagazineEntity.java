@@ -10,7 +10,6 @@ import java.util.Objects;
 import static Lab3.Prompt.print;
 
 @Entity
-@Table(name = "magazine_table")
 public class MagazineEntity extends PublicationEntity {
     @Column(name = "current_issue")
     private LocalDate currentIssue;

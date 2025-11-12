@@ -6,7 +6,6 @@ import jakarta.persistence.Table;
 import static Lab3.Prompt.print;
 
 @Entity
-@Table(name = "book_table")
 public class BookEntity extends PublicationEntity {
 
     private String author;
