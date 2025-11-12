@@ -31,7 +31,7 @@ public class Main {
                 break;
             case "2":
                 try {
-                    repository = new MySQLProductRepository();
+                    repository = new MySQLProductRepository("default");
                     System.out.println("Using MySQL repository.");
                 } catch (Exception e) {
                     System.out.println("Error connecting to MySQL database: " + e.getMessage());
@@ -41,7 +41,7 @@ public class Main {
                 break;
             case "3":
                 try {
-                    repository = new H2ProductRepository();
+                    repository = new H2ProductRepository("h2");
                     System.out.println("Using H2ProductRepository");
                     break;
                 } catch (Exception e) {

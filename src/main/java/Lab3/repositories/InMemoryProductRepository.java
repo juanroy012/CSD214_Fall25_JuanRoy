@@ -73,8 +73,4 @@ public class InMemoryProductRepository implements Repository<ProductEntity> {
         products.clear();
         nextId = 1L;
     }
-
-    public Map<Long, ProductEntity> getProducts() {
-        return products;
-    }
 }

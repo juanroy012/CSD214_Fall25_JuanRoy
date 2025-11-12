@@ -36,8 +36,8 @@ public class AppTest {
     public void setup() {
         outContent = new ByteArrayOutputStream();
         appInMemory = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new InMemoryProductRepository()));
-        appMySql = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new MySQLProductRepository()));
-        appH2 = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new H2ProductRepository()));
+        appMySql = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new MySQLProductRepository("default-test")));
+        appH2 = new App(new ByteArrayInputStream("".getBytes()), new PrintStream(outContent), new ProductService(new H2ProductRepository("h2-test")));
         testOut = new ByteArrayOutputStream();
         System.setOut(new PrintStream(testOut));
     }
@@ -96,7 +96,7 @@ public class AppTest {
                 expectedPrice + "\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository()));
+        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository("default-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -120,7 +120,7 @@ public class AppTest {
                 expectedPrice + "\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository()));
+        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository("h2-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -185,11 +185,22 @@ public class AppTest {
                 "5\n" +
                 expectedDescription2 + "\n" +
                 expectedPrice + "\n" +
-                "3\n" +
-                "1\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository()));
+        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository("default-test")));
+        app.run();
+
+        List<ProductEntity> itemsBefore = app.productService.getAllProducts();
+        ProductEntity itemToDelete = itemsBefore.stream()
+                .filter(item -> item instanceof TicketEntity)
+                .filter(item -> ((TicketEntity) item).getDescription().equals(expectedDescription1))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(itemToDelete);
+        String userInput2 = "3\n" + itemToDelete.getId() + "\n" + "99\n";
+
+        app = getAppWithSimulatedInput(userInput2, new ProductService(new MySQLProductRepository("default-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -204,7 +215,8 @@ public class AppTest {
                 .findFirst()
                 .orElse(null);
 
-        assertTrue(items.size() == 1, "Item list should have 1 added product");
+
+        assertTrue(items.size() == itemsBefore.size() - 1, "Item list should have been decremented by 1");
         assertNull(addedItem1, "Item 1 should've been deleted");
         assertNotNull(addedItem2, "Added item should be in the list");
     }
@@ -223,11 +235,22 @@ public class AppTest {
                 "5\n" +
                 expectedDescription2 + "\n" +
                 expectedPrice + "\n" +
-                "3\n" +
-                "1\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository()));
+        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository("h2-test")));
+        app.run();
+
+        List<ProductEntity> itemsBefore = app.productService.getAllProducts();
+        ProductEntity itemToDelete = itemsBefore.stream()
+                .filter(item -> item instanceof TicketEntity)
+                .filter(item -> ((TicketEntity) item).getDescription().equals(expectedDescription1))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(itemToDelete);
+        String userInput2 = "3\n" + itemToDelete.getId() + "\n" + "99\n";
+
+        app = getAppWithSimulatedInput(userInput2, new ProductService(new H2ProductRepository("h2-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -242,7 +265,8 @@ public class AppTest {
                 .findFirst()
                 .orElse(null);
 
-        assertTrue(items.size() == 1, "Item list should have 1 added product");
+
+        assertTrue(items.size() == itemsBefore.size() - 1, "Item list should have been decremented by 1");
         assertNull(addedItem1, "Item 1 should've been deleted");
         assertNotNull(addedItem2, "Added item should be in the list");
     }
@@ -286,7 +310,7 @@ public class AppTest {
 
     @Test
     public void testEditingItemsMySql() {
-        String initialDescription = "Testing ticket";
+        String initialDescription = "Initial ticket";
         double expectedPrice = 99.99;
 
         String expectedDescription = "Edited Ticket";
@@ -295,13 +319,26 @@ public class AppTest {
                 "5\n" +
                 initialDescription + "\n" +
                 expectedPrice + "\n" +
-                "2\n" +
-                "1\n" +
+                "99\n";
+
+        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository("default-test")));
+        app.run();
+
+        List<ProductEntity> itemsBefore = app.productService.getAllProducts();
+        ProductEntity itemToEdit = itemsBefore.stream()
+                .filter(item -> item instanceof TicketEntity)
+                .filter(item -> ((TicketEntity) item).getDescription().equals(initialDescription))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(itemToEdit);
+        String userInput2 = "2\n" +
+                itemToEdit.getId() + "\n" +
                 expectedDescription + "\n" +
                 expectedPrice + "\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new MySQLProductRepository()));
+        app = getAppWithSimulatedInput(userInput2, new ProductService(new MySQLProductRepository("default-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -310,7 +347,6 @@ public class AppTest {
                 .filter(item -> ((TicketEntity) item).getDescription().equals(initialDescription))
                 .findFirst()
                 .orElse(null);
-
         ProductEntity editedItem = items.stream()
                 .filter(item -> item instanceof TicketEntity)
                 .filter(item -> ((TicketEntity) item).getDescription().equals(expectedDescription))
@@ -323,7 +359,7 @@ public class AppTest {
 
     @Test
     public void testEditingItemsH2() {
-        String initialDescription = "Testing ticket";
+        String initialDescription = "Initial ticket";
         double expectedPrice = 99.99;
 
         String expectedDescription = "Edited Ticket";
@@ -332,13 +368,26 @@ public class AppTest {
                 "5\n" +
                 initialDescription + "\n" +
                 expectedPrice + "\n" +
-                "2\n" +
-                "1\n" +
+                "99\n";
+
+        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository("default-test")));
+        app.run();
+
+        List<ProductEntity> itemsBefore = app.productService.getAllProducts();
+        ProductEntity itemToEdit = itemsBefore.stream()
+                .filter(item -> item instanceof TicketEntity)
+                .filter(item -> ((TicketEntity) item).getDescription().equals(initialDescription))
+                .findFirst()
+                .orElse(null);
+
+        assertNotNull(itemToEdit);
+        String userInput2 = "2\n" +
+                itemToEdit.getId() + "\n" +
                 expectedDescription + "\n" +
                 expectedPrice + "\n" +
                 "99\n";
 
-        app = getAppWithSimulatedInput(userInput, new ProductService(new H2ProductRepository()));
+        app = getAppWithSimulatedInput(userInput2, new ProductService(new H2ProductRepository("default-test")));
         app.run();
 
         List<ProductEntity> items = app.productService.getAllProducts();
@@ -347,7 +396,6 @@ public class AppTest {
                 .filter(item -> ((TicketEntity) item).getDescription().equals(initialDescription))
                 .findFirst()
                 .orElse(null);
-
         ProductEntity editedItem = items.stream()
                 .filter(item -> item instanceof TicketEntity)
                 .filter(item -> ((TicketEntity) item).getDescription().equals(expectedDescription))

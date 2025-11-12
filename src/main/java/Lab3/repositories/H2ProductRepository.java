@@ -24,9 +24,9 @@ public class H2ProductRepository implements Repository<ProductEntity> {
     /**
      * Constructs the repository and initializes the EntityManagerFactory for the "h2" persistence unit.
      */
-    public H2ProductRepository() {
+    public H2ProductRepository(String unitName) {
         // The name "h2" must match the persistence-unit name in persistence.xml
-        this.emf = Persistence.createEntityManagerFactory("h2");
+        this.emf = Persistence.createEntityManagerFactory(unitName);
     }
 
 
